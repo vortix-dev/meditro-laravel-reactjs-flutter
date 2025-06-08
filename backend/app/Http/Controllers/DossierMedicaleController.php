@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class DossierMedicaleController extends Controller
 {
-     public function index()
+     public function index($id)
     {
-        $dossiers = DossierMedicale::where('medecin_id' , auth()->id())->with(['medecin', 'user','ordonnance'])->get();
+        $dossiers = DossierMedicale::where('medecin_id' , $id)->with(['medecin', 'user','ordonnance'])->get();
 
         return response()->json([
             'status' => 200,

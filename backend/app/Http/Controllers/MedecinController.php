@@ -113,5 +113,20 @@ class MedecinController extends Controller
         ],200);
     }
 
+    public function getMedecinByService($id)
+    {
+        $medecins = Medecin::where('service_id', $id)->get();
+
+        if ($medecins->isEmpty()) {
+            return response()->json([
+                'message' => 'No doctors found for this service',
+                'data' => [],
+            ], 200);
+        }
+
+        return response()->json([
+            'data' => $medecins,
+        ], 200);
+    }
     
 }

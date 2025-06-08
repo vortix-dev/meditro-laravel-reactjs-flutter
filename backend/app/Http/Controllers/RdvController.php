@@ -121,7 +121,10 @@ class RdvController extends Controller
 
     public function getMyRdvs()
     {
-        $rdvs = Rdv::where('medecin_id', auth()->id())->with('user')->get();
+        $rdvs = Rdv::where('medecin_id', auth()->id())
+                    ->whereIn('status', ['confirmed', 'done'])
+                    ->with('user') 
+                    ->get();
         return response()->json([
             'status' => 200,
             'data' => $rdvs,

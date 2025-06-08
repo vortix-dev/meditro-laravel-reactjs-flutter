@@ -56,9 +56,9 @@ class AssistanceController extends Controller
         ], 200);
     }
 
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
-       $assistant = Auth::guard('assistance')->user();
+       $assistant = Assistance::find($id);
 
         if (!$assistant) {
             return response()->json(['message' => 'Non autorisé'], 401);
@@ -66,7 +66,7 @@ class AssistanceController extends Controller
 
         $request->validate([
             'name' => 'sometimes|string',
-            'email' => 'sometimes|string|unique:assisstants,email,' . $assistant->id,
+            'email' => 'sometimes|string|unique:assistances,email,' . $assistant->id,
             'password' => 'sometimes|min:6|confirmed', // Nécessite aussi password_confirmation
         ]);
 

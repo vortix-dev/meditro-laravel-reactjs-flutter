@@ -56,16 +56,17 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(s
 Route::middleware(['auth:sanctum', 'abilities:medecin'])->prefix('medecin')->group(static function(){
     Route::apiResource('dossier-medicale',DossierMedicaleController::class);
     Route::put('profile-update', [MedecinController::class , 'update']);
+    Route::get('dossier-medicale/{id}/{idM}' , [RdvController::class , 'show']);
     Route::get('all-my-rdv' , [RdvController::class , 'getMyRdvs']);
     Route::get('profile', [MedecinController::class , 'show']);
     Route::put('update-rdv/{id}' , [RdvController::class , 'UpdateStatus']);
-    Route::get('/ordonnances', [OrdonnanceController::class, 'index']);
+    Route::get('/ordonnances/{id}', [OrdonnanceController::class, 'index']);
     Route::post('/ordonnances', [OrdonnanceController::class, 'store']);
     Route::delete('/ordonnances/{id}', [OrdonnanceController::class, 'destroy']);
     Route::get('/ordonnances/{id}/pdf', [OrdonnanceController::class, 'generatePdf']);
 });
 Route::middleware(['auth:sanctum', 'abilities:assistance'])->prefix('assistance')->group(static function(){
-    Route::put('profile-update', [AssistanceController::class , 'update']);
+    Route::put('profile-update/{id}', [AssistanceController::class , 'update']);
     Route::get('all-rdv' , [RdvController::class , 'index']);
     Route::get('profile', [AssistanceController::class , 'show']);
     Route::put('update-rdv/{id}' , [RdvController::class , 'update']);
@@ -77,7 +78,7 @@ Route::middleware(['auth:sanctum', 'abilities:web'])->prefix('user')->group(stat
     Route::post('cancel-rdv/{id}' , [RdvController::class , 'CancelRdv']);
     Route::get('dossier-medical',[DossierMedicaleController::class , 'getMyDossier']);
     Route::get('/ordonnances/{id}/pdf', [OrdonnanceController::class, 'myOrdonnances']);
-
+    Route::get('medecins/{id}',[MedecinController::class,'getMedecinByService']);
 });
 Route::get('services', [ServiceController::class , 'index']);
 Route::get('medecins', [MedecinController::class , 'index']);
