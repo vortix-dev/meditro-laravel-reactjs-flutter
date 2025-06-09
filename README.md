@@ -41,7 +41,7 @@ The web dashboard includes **four roles** with different permissions:
 ### 3. Assistance (Assistant)
 - Manage all appointments
 - Update appointments
-- View assistant profile
+- Update assistant profile
 
 ### 4. User (Patient)
 - Book appointments
