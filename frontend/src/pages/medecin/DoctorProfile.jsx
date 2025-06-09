@@ -13,6 +13,8 @@ function DoctorProfile() {
   });
   const [isLoading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const id = user.id;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,7 +61,7 @@ function DoctorProfile() {
     }
 
     try {
-      const response = await axios.put('http://localhost:8000/api/medecin/profile-update', payload, {
+      const response = await axios.put(`http://localhost:8000/api/medecin/profile-update/${id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const { name, email } = response.data.data;

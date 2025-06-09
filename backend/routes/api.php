@@ -55,7 +55,7 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(s
 });
 Route::middleware(['auth:sanctum', 'abilities:medecin'])->prefix('medecin')->group(static function(){
     Route::apiResource('dossier-medicale',DossierMedicaleController::class);
-    Route::put('profile-update', [MedecinController::class , 'update']);
+    Route::put('profile-update/{id}', [MedecinController::class , 'update']);
     Route::get('dossier-medicale/{id}/{idM}' , [RdvController::class , 'show']);
     Route::get('all-my-rdv' , [RdvController::class , 'getMyRdvs']);
     Route::get('profile', [MedecinController::class , 'show']);

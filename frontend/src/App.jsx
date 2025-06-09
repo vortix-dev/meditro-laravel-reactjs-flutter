@@ -107,14 +107,6 @@ function App() {
             }
           />
           <Route
-            path="/doctor/medical-records"
-            element={
-              <ProtectedRoute requiredRole="medecin">
-                <MedicalRecords />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/doctor/medical-records/:id"
             element={
               <ProtectedRoute requiredRole="medecin">

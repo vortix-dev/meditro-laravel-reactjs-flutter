@@ -57,9 +57,10 @@ class MedecinController extends Controller
         ], 200);
     }
 
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
-        $medecin = Auth::guard('medecin')->user();
+        $medecin = Medecin::find($id);
+
 
         if (!$medecin) {
             return response()->json(['message' => 'Non autorisé'], 401);
