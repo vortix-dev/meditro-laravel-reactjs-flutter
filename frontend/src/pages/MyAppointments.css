@@ -1,0 +1,103 @@
+.appointments-container {
+  padding-top: 80px;
+  padding-bottom: 60px;
+  min-height: 100vh;
+  background-color: #f3f3f3;
+}
+
+.appointments-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.appointments-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.loading-text {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+}
+
+.table-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.appointments-table th,
+.appointments-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table-header {
+  background-color: #3498db;
+  color: white;
+}
+
+.table-row:hover {
+  background-color: #f9f9f9;
+}
+
+.cancel-button {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cancel-button:hover {
+  text-decoration: underline;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+}
+
+/* حالة pending */
+.status-badge.pending {
+  background-color: #f1c40f;
+  color: #fff;
+}
+
+/* حالة done */
+.status-badge.done {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+/* حالة cancelled */
+.status-badge.cancelled {
+  background-color: #95a5a6;
+  color: #fff;
+}
+
+/* حالة confirmed */
+.status-badge.confirmed {
+  background-color: #3498db;
+  color: #fff;
+}

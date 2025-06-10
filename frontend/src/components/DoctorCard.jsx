@@ -1,10 +1,13 @@
-function DoctorCard({ doctor }) {
+import doctorImage from '../assets/doctor.jpg'; // تأكد من صحة المسار
+import './DoctorCard.css';
+
+function DoctorCard({ doctor, serviceName }) {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition">
-      <img src="https://source.unsplash.com/300x300/?doctor" alt={doctor.name} className="w-full h-48 object-cover" />
-      <div className="p-4">
-        <h3 className="text-xl font-semibold text-gray-800">{doctor.name}</h3>
-        <p className="text-gray-600">{doctor.service_id ? `Specialty: ${doctor.service_id}` : 'General'}</p>
+    <div className="doctor-card">
+      <div className="card-content">
+        <img src={doctorImage} alt="Doctor" className="card-image" />
+        <h3 className="card-title">{doctor.name}</h3>
+        <p className="card-description">Specialty: {serviceName}</p>
       </div>
     </div>
   );

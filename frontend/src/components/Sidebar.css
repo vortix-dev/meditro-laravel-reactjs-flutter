@@ -1,0 +1,82 @@
+/* Sidebar.css */
+.sidebar {
+  width: 16rem; /* Equivalent to w-64 */
+  background: linear-gradient(180deg, #1e293b, #2d3748); /* Dark gradient */
+  color: #e5e7eb; /* Light text for contrast */
+  height: calc(50vh); /* Half of viewport height */
+  padding: 1rem;
+  position: fixed;
+  top: 4rem; /* Below header (assuming header is 4rem tall) */
+  left: 0;
+  border-radius: 10px;
+  z-index: 40; /* Below header (z-50), above footer */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  animation: slide-in 0.3s ease-out;
+  overflow-y: auto; /* Scroll if content exceeds height */
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.sidebar-header {
+  margin: auto; /* Equivalent to mb-6 */
+}
+
+.sidebar-title {
+  font-size: 1.25rem; /* Equivalent to text-xl */
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-item {
+  margin-bottom: 1rem; /* Equivalent to space-y-4 */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.sidebar-item:hover {
+  transform: translateX(5px);
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover background */
+  border-radius: 0.25rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  color: #d1d5db; /* Light gray for links */
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link:focus {
+  color: #3b82f6; /* Blue hover/focus */
+  outline: none;
+}
+
+.sidebar-link:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Focus ring */
+}
+
+.sidebar-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}

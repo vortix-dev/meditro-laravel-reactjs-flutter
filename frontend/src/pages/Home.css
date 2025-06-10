@@ -1,0 +1,85 @@
+.home-container {
+  padding-top: 80px; /* Equivalent to pt-20 (20 * 4px) */
+}
+
+.main-section {
+  background-size: cover;
+  background-position: center;
+  padding: 40px 0;
+  animation: fade-in 1s ease-in-out;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px; /* Equivalent to px-4 */
+}
+
+.main-title {
+  font-size: 2.25rem; /* Equivalent to text-4xl */
+  font-weight: bold;
+  color: #1f2937; /* Equivalent to text-gray-800 */
+  margin-bottom: 16px; /* Equivalent to mb-4 */
+}
+
+@media (min-width: 768px) {
+  .main-title {
+    font-size: 3rem; /* Equivalent to md:text-5xl */
+  }
+}
+
+.main-description {
+  font-size: 1.125rem; /* Equivalent to text-lg */
+  color: #4b5563; /* Equivalent to text-gray-600 */
+  margin-bottom: 24px; /* Equivalent to mb-6 */
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #2563eb; /* A primary blue color */
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8; /* Darker blue on hover */
+}
+
+.services-section {
+  padding: 64px 0; /* Equivalent to py-16 */
+  background-color: #f9fafb; /* Equivalent to bg-gray-50 */
+}
+
+.doctors-section {
+  padding: 64px 0; /* Equivalent to py-16 */
+}
+
+.section-title {
+  font-size: 1.875rem; /* Equivalent to text-3xl */
+  font-weight: bold;
+  text-align: center;
+  color: #1f2937; /* Equivalent to text-gray-800 */
+  margin-bottom: 32px; /* Equivalent to mb-8 */
+  animation: fade-in 1s ease-in-out;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

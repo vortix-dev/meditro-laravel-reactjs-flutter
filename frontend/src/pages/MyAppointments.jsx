@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import './MyAppointments.css'; // استيراد ملف CSS
 
 function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -39,37 +40,39 @@ function MyAppointments() {
   };
 
   return (
-    <div className="pt-20 pb-16 min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 animate-fade-in">
-          My Appointments
-        </h2>
+    <div className="appointments-container">
+      <div className="appointments-wrapper">
+        <h2 className="appointments-title">My Appointments</h2>
         {loading ? (
-          <p className="text-center text-gray-600">Loading...</p>
+          <p className="loading-text">Loading...</p>
         ) : appointments.length === 0 ? (
-          <p className="text-center text-gray-600">No appointments found.</p>
+          <p className="loading-text">No appointments found.</p>
         ) : (
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <table className="w-full">
+          <div className="table-container">
+            <table className="appointments-table">
               <thead>
-                <tr className="bg-blue-500 text-white">
-                  <th className="py-3 px-4 text-left">Doctor</th>
-                  <th className="py-3 px-4 text-left">Date</th>
-                  <th className="py-3 px-4 text-left">Status</th>
-                  <th className="py-3 px-4 text-left">Actions</th>
+                <tr className="table-header">
+                  <th>Doctor</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {appointments.map((appt) => (
-                  <tr key={appt.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">{appt.medecin?.name || 'N/A'}</td>
-                    <td className="py-3 px-4">{appt.date}</td>
-                    <td className="py-3 px-4 capitalize">{appt.status}</td>
-                    <td className="py-3 px-4">
+                  <tr key={appt.id} className="table-row">
+                    <td>{appt.medecin?.name || 'N/A'}</td>
+                    <td>{appt.date}</td>
+                    <td className="capitalize">
+                      <span className={`status-badge ${appt.status}`}>
+                        {appt.status}
+                      </span>
+                    </td>
+                    <td>
                       {appt.status === 'pending' && (
                         <button
                           onClick={() => handleCancel(appt.id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="cancel-button"
                         >
                           Cancel
                         </button>

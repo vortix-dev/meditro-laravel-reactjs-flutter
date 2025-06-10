@@ -1,0 +1,104 @@
+/* MedicalRecord.css */
+.medical-record {
+  padding-top: 80px;
+  padding-bottom: 64px;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #111827;
+  margin-bottom: 40px;
+  letter-spacing: 0.5px;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-top: 40px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  padding: 24px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+
+.card-text {
+  color: #4b5563;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.prescriptions-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 20px 0 10px;
+}
+
+.prescription-item {
+  margin-bottom: 8px;
+  color: #4b5563;
+  padding-left: 12px;
+  position: relative;
+}
+
+.prescription-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+}
+
+.download-button {
+  margin-left: 16px;
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.download-button:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
