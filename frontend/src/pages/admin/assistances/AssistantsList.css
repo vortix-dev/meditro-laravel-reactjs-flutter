@@ -1,0 +1,85 @@
+.assistants-container {
+  padding-top: 80px;
+  padding-bottom: 60px;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.content-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.actions {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  text-align: center;
+  color: #555;
+  font-size: 16px;
+}
+
+.table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow-x: auto;
+}
+
+.assistants-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.assistants-table th,
+.assistants-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.assistants-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.assistants-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-delete:hover {
+  text-decoration: underline;
+}

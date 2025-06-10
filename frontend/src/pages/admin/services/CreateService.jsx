@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import './CreateService.css'; // تأكد من ربط ملف CSS
 
 function CreateService() {
   const [formData, setFormData] = useState({ name: '', img: null });
@@ -29,36 +30,32 @@ function CreateService() {
   };
 
   return (
-    <div className="pt-20 pb-16 min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6 animate-fade-in">
-          Create New Service
-        </h2>
-        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
+    <div className="services-page">
+      <div className="container">
+        <h2 className="page-title">Create New Service</h2>
+        <div className="table-container" style={{ maxWidth: '500px', margin: '0 auto' }}>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700">Service Name</label>
+              <label className="block-label">Service Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-field"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Service Image</label>
+              <label className="block-label">Service Image</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFormData({ ...formData, img: e.target.files[0] })}
-                className="w-full px-3 py-2 border-b border-gray-200"
+                className="input-file"
                 required
               />
             </div>
-            <button type="submit" className="btn-primary w-full">
-              Create Service
-            </button>
+            <button type="submit" className="btn-primary w-full">Create Service</button>
           </form>
         </div>
       </div>

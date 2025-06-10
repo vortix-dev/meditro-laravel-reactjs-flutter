@@ -23,6 +23,7 @@ import DoctorProfile from './pages/medecin/DoctorProfile';
 import DoctorAppointments from './pages/medecin/DoctorAppointments';
 import DoctorPatients from './pages/medecin/DoctorPatients';
 import MedicalRecordDoctor from './pages/medecin/MedicalRecord';
+import EditService from './pages/admin/services/EditService';
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
           >
             <Route path="services" element={<ServicesList />} />
             <Route path="services/create" element={<CreateService />} />
+            <Route path="services/edit/:id" element={<EditService />} />
             <Route path="doctors" element={<DoctorsList />} />
             <Route path="doctors/create" element={<CreateDoctor />} />
             <Route path="assistants" element={<AssistantsList />} />

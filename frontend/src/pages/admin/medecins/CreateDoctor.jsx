@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import './CreateDoctor.css'; // تأكد من إنشاء هذا الملف
 
 function CreateDoctor() {
   const [formData, setFormData] = useState({ service_id: '', name: '', email: '', password: '' });
@@ -37,19 +38,16 @@ function CreateDoctor() {
   };
 
   return (
-    <div className="pt-20 pb-16 min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6 animate-fade-in">
-          Create New Doctor
-        </h2>
-        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
+    <div className="create-doctor-wrapper">
+      <div className="container-create">
+        <h2 className="title">Create New Doctor</h2>
+        <div className="form-card">
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-gray-700">Service</label>
+            <div className="form-group">
+              <label>Service</label>
               <select
                 value={formData.service_id}
                 onChange={(e) => setFormData({ ...formData, service_id: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               >
                 <option value="">Select Service</option>
@@ -60,37 +58,34 @@ function CreateDoctor() {
                 ))}
               </select>
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Name</label>
+            <div className="form-group">
+              <label>Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Username</label>
+            <div className="form-group">
+              <label>Username</label>
               <input
                 type="text"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Password</label>
+            <div className="form-group">
+              <label>Password</label>
               <input
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="btn-submit">
               Create Doctor
             </button>
           </form>

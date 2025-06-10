@@ -1,19 +1,23 @@
 /* Sidebar.css */
 .sidebar {
-  width: 16rem; /* Equivalent to w-64 */
-  background: linear-gradient(180deg, #1e293b, #2d3748); /* Dark gradient */
-  color: #e5e7eb; /* Light text for contrast */
-  height: calc(50vh); /* Half of viewport height */
+  margin-left: 60px;
+  margin-right: 0;
+  width: 16rem;
+  background-color: #ffffff; /* لون مثل الهيدر */
+  color: #f3f4f6;
+  height: calc(100vh - 5rem); /* تحت الهيدر */
   padding: 1rem;
-  position: fixed;
-  top: 4rem; /* Below header (assuming header is 4rem tall) */
+  position: relative;
+  top: 9rem; /* نزول تحت الهيدر */
   left: 0;
+  height: 360px;
   border-radius: 10px;
-  z-index: 40; /* Below header (z-50), above footer */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  z-index: 40;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: slide-in 0.3s ease-out;
-  overflow-y: auto; /* Scroll if content exceeds height */
+  overflow-y: auto;
 }
+
 
 @keyframes slide-in {
   from {
@@ -33,7 +37,7 @@
 .sidebar-title {
   font-size: 1.25rem; /* Equivalent to text-xl */
   font-weight: bold;
-  color: #ffffff;
+  color: #1f2937;
   text-align: center;
 }
 
@@ -59,7 +63,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  color: #d1d5db; /* Light gray for links */
+  color: #1f2937; /* Light gray for links */
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.2s ease;

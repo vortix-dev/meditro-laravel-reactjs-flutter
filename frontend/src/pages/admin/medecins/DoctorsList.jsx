@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { FaTrash } from 'react-icons/fa';
+import './DoctorsList.css'; // ملف CSS خارجي
 
 function DoctorsList() {
   const [doctors, setDoctors] = useState([]);
@@ -42,47 +44,39 @@ function DoctorsList() {
   };
 
   return (
-    <div className="pt-20 pb-16 min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 animate-fade-in">
-          Doctors List
-        </h2>
-        <div className="mb-4">
-          <Link to="/admin/doctors/create" className="btn-primary">
+    <div className="doctors-container">
+      <div className="content-wrapper">
+        <h2 className="title">Doctors List</h2>
+        <div className="actions">
+          <Link to="/admin/doctors/create" className="btn">
             Add New Doctor
           </Link>
         </div>
         {loading ? (
-          <p className="text-center text-gray-600">Loading...</p>
+          <p className="message">Loading...</p>
         ) : doctors.length === 0 ? (
-          <p className="text-center text-gray-600">No doctors found.</p>
+          <p className="message">No doctors found.</p>
         ) : (
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <table className="w-full">
+          <div className="table-container">
+            <table className="doctors-table">
               <thead>
-                <tr className="bg-blue-500 text-white">
-                  <th className="py-3 px-4 text-left">Name</th>
-                  <th className="py-3 px-4 text-left">Email</th>
-                  <th className="py-3 px-4 text-left">Service</th>
-                  <th className="py-3 px-4 text-left">Actions</th>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Service</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {doctors.map((doctor) => (
-                  <tr key={doctor.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">{doctor.name}</td>
-                    <td className="py-3 px-4">{doctor.email}</td>
-                    <td className="py-3 px-4">
-                      {services.find((s) => s.id === doctor.service_id)?.name || 'N/A'}
-                    </td>
-                    <td className="py-3 px-4">
-
-                      <button
-                        onClick={() => handleDelete(doctor.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
+                  <tr key={doctor.id}>
+                    <td>{doctor.name}</td>
+                    <td>{doctor.email}</td>
+                    <td>{services.find((s) => s.id === doctor.service_id)?.name || 'N/A'}</td>
+                    <td>
+                      <Link  onClick={() => handleDelete(doctor.id)}>
+                        <FaTrash />
+                      </Link>
                     </td>
                   </tr>
                 ))}
