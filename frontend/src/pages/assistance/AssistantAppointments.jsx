@@ -88,6 +88,7 @@ function AssistantAppointments() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
+      <Sidebar />
       <div className="flex-1 container mx-auto px-4 pt-20 pb-16 ml-64">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 animate-fade-in">
           Manage Appointments
@@ -122,8 +123,9 @@ function AssistantAppointments() {
                         value={appt.status}
                         onChange={(e) => openModal(appt.id, e.target.value)}
                         className="px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled={appt.status === 'done'}
                       >
-                        <option value="pending">Pending</option>
+                        <option value="">Select </option>
                         <option value="confirmed">Confirmed</option>
                         <option value="cancelled">Cancelled</option>
                       </select>
@@ -168,13 +170,13 @@ function AssistantAppointments() {
                     onClick={closeModal}
                     className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
                   >
-                    Canceled
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     className="btn-primary px-4 py-2"
                   >
-                    Confirmed
+                    Confirm
                   </button>
                 </div>
               </form>

@@ -97,6 +97,7 @@ function DoctorAppointments() {
                         className="px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
                         disabled={['done', 'cancelled'].includes(appt.status)}
                       >
+                        <option value="">Select</option>
                         <option value="done">Done</option>
                         <option value="cancelled">Cancelled</option>
                       </select>

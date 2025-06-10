@@ -12,34 +12,27 @@ function DoctorPatients() {
   const medecinId = user?.id;
 
   useEffect(() => {
-    const fetchPatients = async () => {
-      setLoading(true);
-      try {
-        const patientsResponse = await axios.get('http://localhost:8000/api/medecin/all-my-patient', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const uniquePatients = [];
-        const seenUserIds = new Set();
-        patientsResponse.data.data.forEach((appt) => {
-          if (!seenUserIds.has(appt.user_id)) {
-            seenUserIds.add(appt.user_id);
-            uniquePatients.push(appt);
-          }
-        });
-        setPatients(uniquePatients);
-      } catch (error) {
-        console.error('Error fetching patients:', error.response);
-        toast.error(error.response?.data?.message || 'Failed to fetch patients');
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (token && medecinId) {
-      fetchPatients();
-    } else {
-      toast.error('Please log in again');
+  const fetchPatients = async () => {
+    setLoading(true);
+    try {
+      const patientsResponse = await axios.get('http://localhost:8000/api/medecin/all-my-patient', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPatients(patientsResponse.data.data); // عرض جميع المرضى بدون تصفية
+    } catch (error) {
+      console.error('Error fetching patients:', error.response);
+      toast.error(error.response?.data?.message || 'Failed to fetch patients');
+    } finally {
+      setLoading(false);
     }
-  }, [token, medecinId]);
+  };
+  if (token && medecinId) {
+    fetchPatients();
+  } else {
+    toast.error('Please log in again');
+  }
+}, [token, medecinId]);
+
 
   if (loading) return <p className="text-center text-gray-600 pt-20">Loading...</p>;
 
@@ -58,17 +51,23 @@ function DoctorPatients() {
               <thead>
                 <tr className="bg-blue-500 text-white">
                   <th className="py-3 px-4 text-left">ID</th>
-                  <th className="py-3 px-4 text-left">Patient Name</th>
+                  <th className="py-3 px-4 text-left">Name</th>
+                  <th className="py-3 px-4 text-left">Sexe</th>
+                  <th className="py-3 px-4 text-left">Phone</th>
                   <th className="py-3 px-4 text-left">Date</th>
+                  <th className="py-3 px-4 text-left">Time</th>
                   <th className="py-3 px-4 text-left">Dossier</th>
                 </tr>
               </thead>
               <tbody>
                 {patients.map((appt) => (
-                  <tr key={appt.user_id} className="border-b hover:bg-gray-50">
+                  <tr key={appt.id} className="border-b hover:bg-gray-50">
                     <td className="py-3 px-4">{appt.user_id}</td>
                     <td className="py-3 px-4">{appt.user?.name || 'N/A'}</td>
+                    <td className="py-3 px-4">{appt.user?.sexe || 'N/A'}</td>
+                    <td className="py-3 px-4">{appt.user?.telephone || 'N/A'}</td>
                     <td className="py-3 px-4">{new Date(appt.date).toLocaleDateString()}</td>
+                    <td className="py-3 px-4">{appt.heure || 'N/A'}</td>
                     <td className="py-3 px-4">
                       <Link
                         to={`/doctor/medical-records/${appt.user_id}`}
@@ -81,6 +80,7 @@ function DoctorPatients() {
                 ))}
               </tbody>
             </table>
+
           </div>
         )}
       </div>

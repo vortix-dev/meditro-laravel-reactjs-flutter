@@ -45,25 +45,34 @@ class RdvController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, Rdv $rdv)
+    public function update(Request $request, $id)
     {
+        $rdv = Rdv::find($id);
+
         $validated = $request->validate([
             'status' => 'required|in:confirmed,cancelled',
-            'date' => 'nullable|date|after:today|required_if:status,confirmed',
-            'heure' => 'nullable|date_format:H:i:s|required_if:status,confirmed'
+            'date' => 'nullable|date|after:today',
+            'heure' => 'nullable|date_format:H:i:s',
         ]);
 
-        $rdv->update([
-            'status' => $validated['status'],
-            'date' => $validated['date'] ?? $rdv->date,
-            'heure' => $validated['heure'] ?? $rdv->heure,
-        ]);
+        $updateData = ['status' => $validated['status']];
+
+        if (isset($validated['date'])) {
+            $updateData['date'] = $validated['date'];
+        }
+
+        if (isset($validated['heure'])) {
+            $updateData['heure'] = $validated['heure'];
+        }
+
+        $rdv->update($updateData);
 
         return response()->json([
             'status' => 200,
-            'message' => 'Appointment status updated successfully', // Appointment status updated successfully
-        ], 200);
+            'message' => 'Appointment status updated successfully',
+        ]);
     }
+
 
     public function getMyRdv()
     {
