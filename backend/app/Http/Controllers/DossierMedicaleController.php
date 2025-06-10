@@ -42,21 +42,15 @@ class DossierMedicaleController extends Controller
     /**
      * عرض ملف طبي محدد // Display the specified medical record
      */
-    public function show(DossierMedicale $dossierMedicale)
+    public function show($id)
     {
-        if (!Auth::guard('assistance')->check() && !Auth::guard('medecin')->check() && $dossierMedicale->user_id !== auth()->id()) {
-            return response()->json([
-                'status' => 403,
-                'message' => 'You are not authorized to view this medical record', // You are not authorized to view this medical record
-            ], 403);
-        }
+        $dm = DossierMedicale::find($id);
 
         return response()->json([
             'status' => 200,
-            'data' => $dossierMedicale->load(['medecin', 'user']),
-        ], 200);
+            'data' => $dm
+        ],200);
     }
-
     /**
      * تحديث ملف طبي // Update the specified medical record
      */
@@ -96,6 +90,16 @@ class DossierMedicaleController extends Controller
     public function getMyDossier()
     {
         $dossiers = DossierMedicale::where('user_id' , auth()->id())->with(['medecin', 'user','ordonnance'])->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $dossiers,
+        ], 200);
+    }
+
+    public function getDossier($id)
+    {
+        $dossiers = DossierMedicale::where('user_id' , $id)->with(['medecin', 'user','ordonnance'])->get();
 
         return response()->json([
             'status' => 200,

@@ -21,14 +21,7 @@ function DoctorAppointments() {
         });
         setAppointments(apptResponse.data.data);
 
-        const dossierResponse = await axios.get(`http://localhost:8000/api/medecin/dossier-medicale/${medecinId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const dossiersMap = dossierResponse.data.data.reduce((acc, dossier) => {
-          acc[dossier.user_id] = dossier;
-          return acc;
-        }, {});
-        setDossiers(dossiersMap);
+
       } catch (error) {
         console.error('Error fetching data:', error.response);
         toast.error(error.response?.data?.message || 'Failed to fetch data');
@@ -87,7 +80,6 @@ function DoctorAppointments() {
                   <th className="py-3 px-4 text-left">Time</th>
                   <th className="py-3 px-4 text-left">Status</th>
                   <th className="py-3 px-4 text-left">Actions</th>
-                  <th className="py-3 px-4 text-left">Dossier</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,18 +101,7 @@ function DoctorAppointments() {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="py-3 px-4">
-                      <Link
-                        to={
-                          dossiers[appt.user_id]
-                            ? `/doctor/medical-records/${dossiers[appt.user_id].id}`
-                            : `/doctor/medical-records/new?patient_id=${appt.user_id}`
-                        }
-                        className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                      >
-                        View Dossier Medicale
-                      </Link>
-                    </td>
+                    
                   </tr>
                 ))}
               </tbody>

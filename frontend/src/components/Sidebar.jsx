@@ -56,15 +56,11 @@ function Sidebar() {
               </Link>
             </li>
             <li>
-              <Link to="/doctor/medical-records" className="text-gray-700 hover:text-blue-500">
-                Medical Records
+              <Link to="/doctor/patients" className="text-gray-700 hover:text-blue-500">
+                My Patients
               </Link>
             </li>
-            <li>
-              <Link to="/doctor/prescriptions" className="text-gray-700 hover:text-blue-500">
-                Prescriptions
-              </Link>
-            </li>
+            
           </>
         )}
       </ul>

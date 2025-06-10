@@ -21,9 +21,8 @@ import AssistantAppointments from './pages/assistance/AssistantAppointments';
 import DoctorDashboard from './pages/medecin/DoctorDashboard';
 import DoctorProfile from './pages/medecin/DoctorProfile';
 import DoctorAppointments from './pages/medecin/DoctorAppointments';
-import MedicalRecords from './pages/medecin/MedicalRecords';
-import Prescriptions from './pages/medecin/Prescriptions';
-import DossierMedical from './pages/medecin/DossierMedical';
+import DoctorPatients from './pages/medecin/DoctorPatients';
+import MedicalRecordDoctor from './pages/medecin/MedicalRecord';
 
 function App() {
   return (
@@ -107,18 +106,18 @@ function App() {
             }
           />
           <Route
-            path="/doctor/medical-records/:id"
+            path="/doctor/patients"
             element={
               <ProtectedRoute requiredRole="medecin">
-                <DossierMedical />
+                <DoctorPatients />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/doctor/prescriptions"
+            path="/doctor/medical-records/:user_id"
             element={
               <ProtectedRoute requiredRole="medecin">
-                <Prescriptions />
+                <MedicalRecordDoctor />
               </ProtectedRoute>
             }
           />

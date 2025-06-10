@@ -54,10 +54,14 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(s
     Route::delete('assistance/{id}', [AssistanceController::class , 'destroy']);
 });
 Route::middleware(['auth:sanctum', 'abilities:medecin'])->prefix('medecin')->group(static function(){
-    Route::apiResource('dossier-medicale',DossierMedicaleController::class);
+    Route::post('dossier-medicale',[DossierMedicaleController::class , 'store']);
+    Route::put('dossier-medicale/{id}',[DossierMedicaleController::class , 'update']);
+    Route::get('dossier-medicale/{id}',[DossierMedicaleController::class , 'show']);
+    Route::delete('dossier-medicale/{id}',[DossierMedicaleController::class , 'destroy']);
     Route::put('profile-update/{id}', [MedecinController::class , 'update']);
-    Route::get('dossier-medicale/{id}/{idM}' , [RdvController::class , 'show']);
     Route::get('all-my-rdv' , [RdvController::class , 'getMyRdvs']);
+    Route::get('all-my-patient' , [RdvController::class,'getMyPatients']);
+    Route::get('get-dossier/{id}',[DossierMedicaleController::class, 'getDossier']);
     Route::get('profile', [MedecinController::class , 'show']);
     Route::put('update-rdv/{id}' , [RdvController::class , 'UpdateStatus']);
     Route::get('/ordonnances/{id}', [OrdonnanceController::class, 'index']);

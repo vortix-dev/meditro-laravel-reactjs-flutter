@@ -130,4 +130,16 @@ class RdvController extends Controller
             'data' => $rdvs,
         ], 200);
     }
+
+    public function getMyPatients()
+    {
+        $rdvs = Rdv::where('medecin_id', auth()->id())
+                    ->where('status','done')
+                    ->with('user') 
+                    ->get();
+        return response()->json([
+            'status' => 200,
+            'data' => $rdvs,
+        ], 200);
+    }
 }
