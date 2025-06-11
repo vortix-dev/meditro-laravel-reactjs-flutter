@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'auth_provider.dart';
-import 'login_screen.dart';
-import 'register_screen.dart';
-import 'user_dashboard.dart';
-import 'doctor_dashboard.dart';
-import 'book_appointment_screen.dart';
-import 'my_appointments_screen.dart';
-import 'medical_record_screen.dart';
+import 'Auth/auth_provider.dart';
+import 'Auth/login_screen.dart';
+import 'Auth/register_screen.dart';
+import 'Patient/user_dashboard.dart';
+import 'Doctor/doctor_dashboard.dart';
+import 'Patient/book_appointment_screen.dart';
+import 'Patient/my_appointments_screen.dart';
+import 'Patient/medical_record_screen.dart';
 
 void main() {
   runApp(const MyApp());

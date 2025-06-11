@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'auth_provider.dart';
+import '../Auth/auth_provider.dart';
 
 class DoctorDashboard extends StatelessWidget {
   const DoctorDashboard({super.key});
