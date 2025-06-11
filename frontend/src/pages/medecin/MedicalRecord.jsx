@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Sidebar from '../../components/Sidebar';
+import './MedicalRecord.css'; 
 
 function MedicalRecord() {
   const { user_id } = useParams();
@@ -84,7 +85,7 @@ function MedicalRecord() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/medecin/dossier-medicale/${dossier.id}`,
+        `http://localhost:8000/api/medecin/dossier-medicale/${user_id}`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

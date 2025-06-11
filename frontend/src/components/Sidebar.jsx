@@ -6,7 +6,7 @@ function Sidebar() {
   const role = user?.role;
 
   // Hide sidebar if no valid role
-  if (!['admin', 'assistant', 'medecin'].includes(role)) {
+  if (!['admin', 'assistance', 'medecin'].includes(role)) {
     return null;
   }
 
@@ -14,7 +14,7 @@ function Sidebar() {
     <nav className="sidebar" role="navigation" aria-label="Dashboard Navigation">
       <div className="sidebar-header">
         <h2 className="sidebar-title">
-          {role === 'admin' ? 'Admin Panel' : role === 'assistant' ? 'Assistant Panel' : 'Doctor Panel'}
+          {role === 'admin' ? 'Admin Panel' : role === 'assistance' ? 'Assistant Panel' : 'Doctor Panel'}
         </h2>
       </div>
       <ul className="sidebar-list">
@@ -46,7 +46,7 @@ function Sidebar() {
             </li>
           </>
         )}
-        {role === 'assistant' && (
+        {role === 'assistance' && (
           <>
             <li className="sidebar-item">
               <Link to="/assistant/profile" className="sidebar-link">

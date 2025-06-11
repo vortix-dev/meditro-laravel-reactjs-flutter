@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rdv;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RdvController extends Controller
@@ -142,13 +143,17 @@ class RdvController extends Controller
 
     public function getMyPatients()
     {
-        $rdvs = Rdv::where('medecin_id', auth()->id())
-                    ->where('status','done')
-                    ->with('user') 
-                    ->get();
+        $patientIds = Rdv::where('medecin_id', auth()->id())
+                        ->where('status', 'done')
+                        ->pluck('user_id') // جمع كل user_id
+                        ->unique(); // حذف التكرارات
+
+        $patients = User::whereIn('id', $patientIds)->with(['rdv'])->get();
+
         return response()->json([
             'status' => 200,
-            'data' => $rdvs,
+            'data' => $patients,
         ], 200);
     }
+
 }

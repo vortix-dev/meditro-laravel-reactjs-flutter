@@ -1,14 +1,15 @@
-import React from 'react'
-import Sidebar from '../../components/Sidebar'
-import { Outlet } from 'react-router-dom'
+import React from 'react';
+import Sidebar from '../../components/Sidebar';
+import { Outlet } from 'react-router-dom';
+import './Assistant.css'; // تأكد من إنشاء هذا الملف
 
 export const Assistant = () => {
   return (
-        <div className="flex min-h-screen">
-            <Sidebar />
-            <main className="flex-1 p-6 bg-gray-100">
-                <Outlet />
-            </main>
-        </div>
-  )
-}
+    <div className="layout-container">
+      <Sidebar />
+      <main className="layout-content">
+        <Outlet />
+      </main>
+    </div>
+  );
+};

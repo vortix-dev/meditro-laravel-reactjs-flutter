@@ -54,25 +54,50 @@ class DossierMedicaleController extends Controller
     /**
      * تحديث ملف طبي // Update the specified medical record
      */
-    public function update(Request $request, DossierMedicale $dossierMedicale)
-    {
-        $validated = $request->validate([
-            'medecin_id' => 'sometimes|exists:medecins,id',
-            'user_id' => 'sometimes|exists:users,id',
-            'diagnostic' => 'sometimes|string|max:255',
-            'groupe_sanguin' => 'sometimes|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-            'poids' => 'sometimes|numeric|min:0',
-            'taille' => 'sometimes|numeric|min:0',
-        ]);
+    public function update(Request $request, $id)
+{
+    $dossierMedicale = DossierMedicale::where('user_id', $id)->first();
 
-        $dossierMedicale->update($validated);
-
+    if (!$dossierMedicale) {
         return response()->json([
-            'status' => 200,
-            'data' => $dossierMedicale->load(['medecin', 'user']),
-            'message' => 'Medical record updated successfully', // Medical record updated successfully
-        ], 200);
+            'status' => 404,
+            'message' => 'Dossier médical non trouvé pour cet utilisateur.',
+        ], 404);
     }
+
+    $request->validate([
+        'diagnostic' => 'sometimes|string|max:255',
+        'groupe_sanguin' => 'sometimes|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+        'poids' => 'sometimes|numeric|min:0',
+        'taille' => 'sometimes|numeric|min:0',
+    ]);
+
+    if ($request->filled('diagnostic')) {
+        $dossierMedicale->diagnostic = $request->diagnostic;
+    }
+
+    if ($request->filled('groupe_sanguin')) {
+        $dossierMedicale->groupe_sanguin = $request->groupe_sanguin;
+    }
+
+    if ($request->filled('poids')) {
+        $dossierMedicale->poids = $request->poids;
+    }
+
+    if ($request->filled('taille')) {
+        $dossierMedicale->taille = $request->taille;
+    }
+
+    $dossierMedicale->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Fiche médicale mise à jour avec succès.',
+        'data' => $dossierMedicale,
+    ], 200);
+}
+
+
 
     /**
      * حذف ملف طبي // Remove the specified medical record

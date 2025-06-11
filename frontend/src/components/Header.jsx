@@ -16,7 +16,7 @@ function Header() {
   const isAuthenticated = !!token;
   const isUserRole = user?.role === 'user';
   const isAdminRole = user?.role === 'admin';
-  const isAssistantRole = user?.role === 'assistant'; // Fixed typo
+  const isAssistantRole = user?.role === 'assistance'; // Fixed typo
   const isDoctorRole = user?.role === 'medecin';
 
   const handleLogout = async () => {
