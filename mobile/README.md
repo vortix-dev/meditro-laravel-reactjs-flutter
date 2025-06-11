@@ -1,4 +1,4 @@
-# meditro
+# meditone
 
 A new Flutter project.
 
