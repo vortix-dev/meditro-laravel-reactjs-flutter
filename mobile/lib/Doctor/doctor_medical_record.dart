@@ -377,6 +377,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
             },
           ];
         });
+        await _fetchDossier(); // Refresh dossier to ensure consistency
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -386,19 +387,14 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
             backgroundColor: Colors.green,
           ),
         );
-      } else if (response.statusCode == 422) {
-        final errors = json.decode(response.body)['errors'];
-        for (var error in errors.values) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error[0]), backgroundColor: Colors.red),
-          );
-        }
       } else {
+        final errors = json.decode(response.body)['errors'] ?? {};
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              json.decode(response.body)['message'] ??
-                  'Failed to create prescription',
+              errors.isNotEmpty
+                  ? errors.values.first[0]
+                  : 'Failed to create prescription',
             ),
             backgroundColor: Colors.red,
           ),
