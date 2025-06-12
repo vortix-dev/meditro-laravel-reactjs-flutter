@@ -37,7 +37,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
     try {
       final servicesResponse = await http.get(
-        Uri.parse('http://192.168.1.24:8000/api/services'),
+        Uri.parse('http://192.168.1.4:8000/api/services'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -45,7 +45,7 @@ class _UserDashboardState extends State<UserDashboard> {
       );
 
       final doctorsResponse = await http.get(
-        Uri.parse('http://192.168.1.24:8000/api/medecins'),
+        Uri.parse('http://192.168.1.4:8000/api/medecins'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

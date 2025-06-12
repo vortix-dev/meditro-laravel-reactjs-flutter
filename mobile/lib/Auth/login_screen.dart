@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'auth_provider.dart';
+import '../Patient/user_dashboard.dart';
+import '../Doctor/doctor_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -149,9 +151,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                           );
                                           if (success) {
                                             if (authProvider.userRole == 'user') {
-                                              Navigator.pushReplacementNamed(context, '/user');
+                                              Navigator.of(context).pushAndRemoveUntil(
+                                                MaterialPageRoute(builder: (context) => const UserDashboard()),
+                                                (Route<dynamic> route) => false,
+                                              );
                                             } else if (authProvider.userRole == 'medecin') {
-                                              Navigator.pushReplacementNamed(context, '/doctor');
+                                              Navigator.of(context).pushAndRemoveUntil(
+                                                MaterialPageRoute(builder: (context) => const DoctorDashboard()),
+                                                (Route<dynamic> route) => false,
+                                              );
                                             } else {
                                               ScaffoldMessenger.of(context).showSnackBar(
                                                 const SnackBar(

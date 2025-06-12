@@ -36,7 +36,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.24:8000/api/user/dossier-medical'),
+        Uri.parse('http://192.168.1.4:8000/api/user/dossier-medical'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -87,7 +87,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.24:8000/api/user/ordonnances/$ordonnanceId/pdf',
+          'http://192.168.1.4:8000/api/user/ordonnances/$ordonnanceId/pdf',
         ),
         headers: {'Authorization': 'Bearer $token'},
       );

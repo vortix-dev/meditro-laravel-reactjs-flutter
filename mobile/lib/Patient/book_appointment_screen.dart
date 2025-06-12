@@ -48,7 +48,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.24:8000/api/services'),
+        Uri.parse('http://192.168.1.4:8000/api/services'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -109,7 +109,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.24:8000/api/user/medecins/$_selectedServiceId',
+          'http://192.168.1.4:8000/api/user/medecins/$_selectedServiceId',
         ),
         headers: {
           'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.24:8000/api/user/create-rdv'),
+        Uri.parse('http://192.168.1.4:8000/api/user/create-rdv'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

@@ -5,16 +5,18 @@ import 'dart:convert';
 class AuthProvider with ChangeNotifier {
   String? _token;
   String? _userRole;
+  String? _userId;
   bool _isLoading = false;
   String? _errorMessage;
 
   String? get token => _token;
+  String? get userId => _userId;
   String? get userRole => _userRole;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
   final String baseUrl =
-      'http://192.168.1.24:8000/api'; // Replace with your API URL
+      'http://192.168.1.4:8000/api'; // Replace with your API URL
 
   Future<bool> register({
     required String name,
@@ -82,6 +84,7 @@ class AuthProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _token = data['token'];
+        _userId = data['user']['id'].toString(); // Store user ID
         _userRole =
             data['user']['role'] ?? 'user'; // Adjust based on your API response
         _isLoading = false;
@@ -105,6 +108,7 @@ class AuthProvider with ChangeNotifier {
   void logout() {
     _token = null;
     _userRole = null;
+    _userId = null;
     _errorMessage = null;
     notifyListeners();
   }
