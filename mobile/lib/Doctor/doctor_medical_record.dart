@@ -94,22 +94,32 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         },
       );
 
+      print(
+        'Fetch dossier response: ${response.statusCode} - ${response.body}',
+      ); // Enhanced debug log
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'];
         setState(() {
-          if (data.isNotEmpty) {
+          if (data != null && data.isNotEmpty) {
             _dossier = data[0];
             _prescriptions = _dossier!['ordonnance'] ?? [];
             _diagnosticController.text = _dossier!['diagnostic'] ?? '';
             _groupeSanguinController.text = _dossier!['groupe_sanguin'] ?? '';
             _poidsController.text = _dossier!['poids']?.toString() ?? '';
             _tailleController.text = _dossier!['taille']?.toString() ?? '';
+            print('Dossier set: $_dossier'); // Confirm dossier is set
+          } else {
+            _dossier = null;
+            _prescriptions = [];
+            print('No dossier found for userId: ${widget.userId}');
           }
           _isLoading = false;
         });
       } else {
         setState(() {
           _isLoading = false;
+          _dossier = null; // Explicitly set to null on failure
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -122,8 +132,10 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         );
       }
     } catch (e) {
+      print('Error fetching dossier: $e');
       setState(() {
         _isLoading = false;
+        _dossier = null; // Explicitly set to null on error
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -151,6 +163,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     };
 
     try {
+      print('Creating dossier with payload: ${json.encode(payload)}');
       final response = await http.post(
         Uri.parse('http://192.168.1.4:8000/api/medecin/dossier-medicale'),
         headers: {
@@ -160,16 +173,21 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         body: json.encode(payload),
       );
 
+      print(
+        'Create dossier response: ${response.statusCode} - ${response.body}',
+      );
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'];
         setState(() {
           _dossier = data;
-          _prescriptions = data['ordonnance'] ?? [];
+          _prescriptions = [];
           _isCreateModalOpen = false;
           _diagnosticController.clear();
           _groupeSanguinController.clear();
           _poidsController.clear();
           _tailleController.clear();
+          print('Dossier created: $_dossier');
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -180,6 +198,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
             backgroundColor: Colors.green,
           ),
         );
+        await _fetchDossier(); // Refresh dossier to ensure consistency
       } else if (response.statusCode == 422) {
         final errors = json.decode(response.body)['errors'];
         for (var error in errors.values) {
@@ -199,6 +218,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         );
       }
     } catch (e) {
+      print('Error creating dossier: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to create dossier'),
@@ -214,6 +234,16 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
 
+    if (_dossier == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No dossier exists to update'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final payload = {
       'diagnostic': _diagnosticController.text,
       'groupe_sanguin': _groupeSanguinController.text,
@@ -222,6 +252,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     };
 
     try {
+      print('Updating dossier with payload: ${json.encode(payload)}');
       final response = await http.put(
         Uri.parse(
           'http://192.168.1.4:8000/api/medecin/dossier-medicale/${widget.userId}',
@@ -231,6 +262,10 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
           'Authorization': 'Bearer $token',
         },
         body: json.encode(payload),
+      );
+
+      print(
+        'Update dossier response: ${response.statusCode} - ${response.body}',
       );
 
       if (response.statusCode == 200) {
@@ -267,6 +302,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         );
       }
     } catch (e) {
+      print('Error updating dossier: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to update dossier'),
@@ -278,6 +314,18 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
 
   Future<void> _createPrescription() async {
     if (!_formKey.currentState!.validate()) return;
+
+    if (_dossier == null || _dossier!['id'] == null) {
+      print('Error: Attempted to create prescription with null dossier or id');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please create a medical record first'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() => _isPrescriptionModalOpen = false);
+      return;
+    }
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
@@ -300,6 +348,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     };
 
     try {
+      print('Creating prescription with payload: ${json.encode(payload)}');
       final response = await http.post(
         Uri.parse('http://192.168.1.4:8000/api/medecin/ordonnances'),
         headers: {
@@ -309,10 +358,12 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         body: json.encode(payload),
       );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(
-          response.body,
-        )['data']; // Fixed: Access 'data' field
+      print(
+        'Create prescription response: ${response.statusCode} - ${response.body}',
+      );
+
+      if (response.statusCode == 201) {
+        final data = json.decode(response.body)['data'];
         setState(() {
           _prescriptions = [..._prescriptions, data];
           _isPrescriptionModalOpen = false;
@@ -354,6 +405,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         );
       }
     } catch (e) {
+      print('Error creating prescription: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to create prescription'),
@@ -368,12 +420,17 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     final token = authProvider.token;
 
     try {
+      print('Deleting prescription with id: $id');
       final response = await http.delete(
         Uri.parse('http://192.168.1.4:8000/api/medecin/ordonnances/$id'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         },
+      );
+
+      print(
+        'Delete prescription response: ${response.statusCode} - ${response.body}',
       );
 
       if (response.statusCode == 200) {
@@ -398,6 +455,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         );
       }
     } catch (e) {
+      print('Error deleting prescription: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to delete prescription'),
@@ -407,41 +465,69 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     }
   }
 
-  Future<void> _downloadPdf(int id) async {
+  Future<void> _downloadPrescription(int ordonnanceId) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
 
     try {
-      final dir = await getExternalStorageDirectory();
-      final filePath = '${dir!.path}/ordonnance-$id.pdf';
-
-      await FileDownloader.downloadFile(
-        url: 'http://192.168.1.4:8000/api/medecin/ordonnances/$id/pdf',
-        name: 'ordonnance-$id.pdf',
+      final response = await http.get(
+        Uri.parse(
+          'http://192.168.1.4:8000/api/medecin/ordonnances/$ordonnanceId/pdf',
+        ),
         headers: {'Authorization': 'Bearer $token'},
-        onDownloadCompleted: (path) async {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('PDF downloaded to $path'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          await OpenFile.open(path);
-        },
-        onDownloadError: (error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to download PDF: $error'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        },
       );
+
+      if (response.statusCode == 200) {
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/ordonnance-$ordonnanceId.pdf');
+        await file.writeAsBytes(response.bodyBytes);
+        final result = await OpenFile.open(file.path);
+        if (result.type == ResultType.done) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Prescription downloaded successfully!',
+                style: GoogleFonts.poppins(color: Colors.white),
+              ),
+              backgroundColor: Color(0xFF4DB6AC),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Failed to open PDF: ${result.message}',
+                style: GoogleFonts.poppins(color: Colors.white),
+              ),
+              backgroundColor: Color(0xFFFF7043),
+            ),
+          );
+        }
+      } else {
+        String errorMessage = 'Failed to download prescription';
+        try {
+          final errorData = json.decode(utf8.decode(response.bodyBytes));
+          errorMessage =
+              errorData['message'] ?? 'Failed to download prescription';
+        } catch (_) {}
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              errorMessage,
+              style: GoogleFonts.poppins(color: Colors.white),
+            ),
+            backgroundColor: Color(0xFFFF7043),
+          ),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to download PDF'),
-          backgroundColor: Colors.red,
+        SnackBar(
+          content: Text(
+            'Error downloading prescription: $e',
+            style: GoogleFonts.poppins(color: Colors.white),
+          ),
+          backgroundColor: Color(0xFFFF7043),
         ),
       );
     }
@@ -456,6 +542,19 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
         'duree': TextEditingController(),
       });
     });
+  }
+
+  void _openPrescriptionModal() {
+    if (_dossier == null || _dossier!['id'] == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please create a medical record first'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    setState(() => _isPrescriptionModalOpen = true);
   }
 
   void _onNavItemTapped(int index) {
@@ -577,6 +676,9 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
               )
             : LayoutBuilder(
                 builder: (context, constraints) {
+                  print(
+                    'Building UI, dossier is: ${_dossier != null ? "set" : "null"}',
+                  ); // Debug UI render
                   return SingleChildScrollView(
                     padding: EdgeInsets.all(
                       isTablet ? 32.0 : constraints.maxWidth * 0.05,
@@ -742,32 +844,46 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
                                           color: const Color(0xFF3F51B5),
                                         ),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () => setState(
-                                          () => _isPrescriptionModalOpen = true,
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF3F51B5,
+                                      if (_dossier != null &&
+                                          _dossier!['id'] !=
+                                              null) // Stricter condition
+                                        ElevatedButton(
+                                          onPressed:
+                                              _openPrescriptionModal, // Use new method
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(
+                                              0xFF3F51B5,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
                                           ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
+                                          child: Text(
+                                            'Add Prescription',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.white,
+                                              fontSize: baseFontSize - 2,
                                             ),
                                           ),
                                         ),
-                                        child: Text(
-                                          'Add Prescription',
-                                          style: GoogleFonts.poppins(
-                                            color: Colors.white,
-                                            fontSize: baseFontSize - 2,
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
-                                if (_prescriptions.isEmpty)
+                                if (_dossier == null || _dossier!['id'] == null)
+                                  Padding(
+                                    padding: EdgeInsets.all(
+                                      constraints.maxWidth * 0.04,
+                                    ),
+                                    child: Text(
+                                      'Create a medical record to add prescriptions.',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: baseFontSize,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  )
+                                else if (_prescriptions.isEmpty)
                                   Padding(
                                     padding: EdgeInsets.all(
                                       constraints.maxWidth * 0.04,
@@ -815,9 +931,10 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
                                                 Icons.download,
                                                 color: Color(0xFF4DB6AC),
                                               ),
-                                              onPressed: () => _downloadPdf(
-                                                prescription['id'],
-                                              ),
+                                              onPressed: () =>
+                                                  _downloadPrescription(
+                                                    prescription['id'],
+                                                  ),
                                             ),
                                             IconButton(
                                               icon: const Icon(
