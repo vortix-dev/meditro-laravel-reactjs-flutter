@@ -22,7 +22,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   final _passwordConfirmController = TextEditingController();
   bool _isLoading = false;
   int _selectedIndex = 2; // Set to 2 since this is the Profile screen
-
+   final String baseUrl =
+      'http://192.168.1.2:8000/api';
   @override
   void initState() {
     super.initState();
@@ -61,7 +62,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/profile'),
+        Uri.parse('$baseUrl/medecin/profile'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -131,7 +132,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/profile-update/$userId'),
+        Uri.parse('$baseUrl/medecin/profile-update/$userId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

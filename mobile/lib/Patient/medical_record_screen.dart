@@ -19,7 +19,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
   List<dynamic> _medicalRecords = [];
   bool _isLoading = false;
   int _selectedIndex = 2; // Profile selected by default
-
+  final String baseUrl =
+      'http://192.168.1.2:8000/api';
   @override
   void initState() {
     super.initState();
@@ -36,7 +37,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/user/dossier-medical'),
+        Uri.parse('$baseUrl/user/dossier-medical'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -87,7 +88,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.4:8000/api/user/ordonnances/$ordonnanceId/pdf',
+          '$baseUrl/user/ordonnances/$ordonnanceId/pdf',
         ),
         headers: {'Authorization': 'Bearer $token'},
       );

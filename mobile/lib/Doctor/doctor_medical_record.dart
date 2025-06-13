@@ -26,6 +26,8 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
   bool _isCreateModalOpen = false;
   bool _isEditModalOpen = false;
   bool _isPrescriptionModalOpen = false;
+   final String baseUrl =
+      'http://192.168.1.2:8000/api';
   final _formKey = GlobalKey<FormState>();
   final _diagnosticController = TextEditingController();
   final _groupeSanguinController = TextEditingController();
@@ -86,7 +88,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.4:8000/api/medecin/get-dossier/${widget.userId}',
+          '$baseUrl/medecin/get-dossier/${widget.userId}',
         ),
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +167,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     try {
       print('Creating dossier with payload: ${json.encode(payload)}');
       final response = await http.post(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/dossier-medicale'),
+        Uri.parse('$baseUrl/medecin/dossier-medicale'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -255,7 +257,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
       print('Updating dossier with payload: ${json.encode(payload)}');
       final response = await http.put(
         Uri.parse(
-          'http://192.168.1.4:8000/api/medecin/dossier-medicale/${widget.userId}',
+          '$baseUrl/medecin/dossier-medicale/${widget.userId}',
         ),
         headers: {
           'Content-Type': 'application/json',
@@ -350,7 +352,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     try {
       print('Creating prescription with payload: ${json.encode(payload)}');
       final response = await http.post(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/ordonnances'),
+        Uri.parse('$baseUrl/medecin/ordonnances'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -418,7 +420,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     try {
       print('Deleting prescription with id: $id');
       final response = await http.delete(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/ordonnances/$id'),
+        Uri.parse('$baseUrl/medecin/ordonnances/$id'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -468,7 +470,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.4:8000/api/medecin/ordonnances/$ordonnanceId/pdf',
+          '$baseUrl/medecin/ordonnances/$ordonnanceId/pdf',
         ),
         headers: {'Authorization': 'Bearer $token'},
       );

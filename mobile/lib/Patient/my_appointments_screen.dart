@@ -17,7 +17,8 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
   bool _isLoading = false;
   String? _errorMessage;
   int _selectedIndex = 2; // Profile selected by default
-
+   final String baseUrl =
+      'http://192.168.1.2:8000/api';
   @override
   void initState() {
     super.initState();
@@ -35,7 +36,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/user/all-my-rdv'),
+        Uri.parse('$baseUrl/user/all-my-rdv'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -73,7 +74,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.4:8000/api/user/cancel-rdv/$id'),
+        Uri.parse('$baseUrl/user/cancel-rdv/$id'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

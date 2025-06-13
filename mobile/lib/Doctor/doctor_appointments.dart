@@ -19,7 +19,7 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
   bool _isLoading = false;
   String? _errorMessage;
   int _selectedIndex = 1; // Set to 1 since this is the Appointments screen
-
+  final String baseUrl = 'http://192.168.1.2:8000/api';
   @override
   void initState() {
     super.initState();
@@ -52,7 +52,7 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/all-my-rdv'),
+        Uri.parse('$baseUrl/medecin/all-my-rdv'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -100,7 +100,7 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/update-rdv/$id'),
+        Uri.parse('$baseUrl/medecin/update-rdv/$id'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

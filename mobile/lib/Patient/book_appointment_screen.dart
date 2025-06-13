@@ -26,7 +26,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   String? _successMessage;
   int _selectedIndex = 1; // Book selected by default
   bool _isButtonPressed = false;
-
+   final String baseUrl =
+      'http://192.168.1.2:8000/api';
   @override
   void initState() {
     super.initState();
@@ -48,7 +49,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/services'),
+        Uri.parse('$baseUrl/services'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -109,7 +110,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     try {
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.4:8000/api/user/medecins/$_selectedServiceId',
+          '$baseUrl/user/medecins/$_selectedServiceId',
         ),
         headers: {
           'Content-Type': 'application/json',
@@ -218,7 +219,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.4:8000/api/user/create-rdv'),
+        Uri.parse('$baseUrl/user/create-rdv'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

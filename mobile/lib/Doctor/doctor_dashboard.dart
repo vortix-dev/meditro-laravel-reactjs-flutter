@@ -19,7 +19,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
   int _appointmentCount = 0;
   bool _isLoading = false;
   String? _errorMessage;
-
+   final String baseUrl =
+      'http://192.168.1.2:8000/api'; 
   @override
   void initState() {
     super.initState();
@@ -37,7 +38,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
 
     try {
       final patientsResponse = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/all-my-patient'),
+        Uri.parse('$baseUrl/medecin/all-my-patient'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -45,7 +46,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       );
 
       final appointmentsResponse = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/all-my-rdv'),
+        Uri.parse('$baseUrl/medecin/all-my-rdv'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

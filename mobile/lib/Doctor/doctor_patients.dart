@@ -16,6 +16,8 @@ class _DoctorPatientsState extends State<DoctorPatients> {
   List<dynamic> _patients = [];
   bool _isLoading = false;
   String? _errorMessage;
+   final String baseUrl =
+      'http://192.168.1.2:8000/api';
 
   @override
   void initState() {
@@ -42,7 +44,7 @@ class _DoctorPatientsState extends State<DoctorPatients> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/medecin/all-my-patient'),
+        Uri.parse('$baseUrl/medecin/all-my-patient'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',

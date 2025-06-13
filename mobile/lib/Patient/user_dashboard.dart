@@ -19,7 +19,8 @@ class _UserDashboardState extends State<UserDashboard> {
   String? _errorMessage;
   bool _isBookButtonPressed = false;
   int _selectedIndex = 0;
-
+   final String baseUrl =
+      'http://192.168.1.2:8000/api';
   @override
   void initState() {
     super.initState();
@@ -37,7 +38,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
     try {
       final servicesResponse = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/services'),
+        Uri.parse('$baseUrl/services'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -45,7 +46,7 @@ class _UserDashboardState extends State<UserDashboard> {
       );
 
       final doctorsResponse = await http.get(
-        Uri.parse('http://192.168.1.4:8000/api/medecins'),
+        Uri.parse('$baseUrl/medecins'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
