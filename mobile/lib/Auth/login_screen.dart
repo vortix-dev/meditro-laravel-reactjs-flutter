@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                            labelText: 'Email',
+                            labelText: 'Email or Username',
                             labelStyle: GoogleFonts.poppins(),
                             filled: true,
                             fillColor: Colors.grey[100],
