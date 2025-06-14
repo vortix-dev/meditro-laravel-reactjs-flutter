@@ -20,7 +20,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
   bool _isLoading = false;
   String? _errorMessage;
    final String baseUrl =
-      'http://192.168.1.2:8000/api'; 
+      'https://api-meditro.x10.mx/api'; 
   @override
   void initState() {
     super.initState();

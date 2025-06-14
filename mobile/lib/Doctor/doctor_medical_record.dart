@@ -27,7 +27,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
   bool _isEditModalOpen = false;
   bool _isPrescriptionModalOpen = false;
    final String baseUrl =
-      'http://192.168.1.2:8000/api';
+      'https://api-meditro.x10.mx/api';
   final _formKey = GlobalKey<FormState>();
   final _diagnosticController = TextEditingController();
   final _groupeSanguinController = TextEditingController();

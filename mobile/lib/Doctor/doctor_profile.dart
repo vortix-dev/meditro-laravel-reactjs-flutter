@@ -23,7 +23,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   bool _isLoading = false;
   int _selectedIndex = 2; // Set to 2 since this is the Profile screen
    final String baseUrl =
-      'http://192.168.1.2:8000/api';
+      'https://api-meditro.x10.mx/api';
   @override
   void initState() {
     super.initState();

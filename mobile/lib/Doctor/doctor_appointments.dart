@@ -16,10 +16,13 @@ class DoctorAppointmentsScreen extends StatefulWidget {
 
 class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
   List<dynamic> _appointments = [];
+  List<dynamic> _filteredAppointments = [];
   bool _isLoading = false;
   String? _errorMessage;
-  int _selectedIndex = 1; // Set to 1 since this is the Appointments screen
-  final String baseUrl = 'http://192.168.1.2:8000/api';
+  int _selectedIndex = 1;
+  String _selectedFilter = 'all'; // Filter for appointments
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
+
   @override
   void initState() {
     super.initState();
@@ -37,16 +40,7 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
     final userId = authProvider.userId;
 
     if (token == null || userId == null) {
-      setState(() {
-        _errorMessage = 'Please log in again';
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please log in again'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _handleError('Please log in again');
       return;
     }
 
@@ -63,35 +57,44 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
         final data = json.decode(response.body);
         setState(() {
           _appointments = data['data'];
+          _applyFilter();
           _isLoading = false;
         });
       } else {
-        setState(() {
-          _errorMessage = 'Failed to fetch appointments';
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              json.decode(response.body)['message'] ??
-                  'Failed to fetch appointments',
-            ),
-            backgroundColor: Colors.red,
-          ),
+        _handleError(
+          json.decode(response.body)['message'] ??
+              'Failed to fetch appointments',
         );
       }
     } catch (e) {
-      setState(() {
-        _errorMessage = 'An error occurred. Please try again.';
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('An error occurred. Please try again.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _handleError('An error occurred. Please try again.');
     }
+  }
+
+  void _applyFilter() {
+    setState(() {
+      if (_selectedFilter == 'confirmed') {
+        _filteredAppointments = _appointments
+            .where((appt) => appt['status'] == 'confirmed')
+            .toList();
+      } else if (_selectedFilter == 'done') {
+        _filteredAppointments = _appointments
+            .where((appt) => appt['status'] == 'done')
+            .toList();
+      } else {
+        _filteredAppointments = List.from(_appointments);
+      }
+    });
+  }
+
+  void _handleError(String message) {
+    setState(() {
+      _errorMessage = message;
+      _isLoading = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
   }
 
   Future<void> _updateStatus(int id, String status) async {
@@ -117,6 +120,7 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
             }
             return appt;
           }).toList();
+          _applyFilter();
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -125,23 +129,12 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
           ),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              json.decode(response.body)['message'] ??
-                  'Failed to update status',
-            ),
-            backgroundColor: Colors.red,
-          ),
+        _handleError(
+          json.decode(response.body)['message'] ?? 'Failed to update status',
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update status'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _handleError('Failed to update status');
     }
   }
 
@@ -151,8 +144,6 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
     });
     if (index == 0) {
       Navigator.pushNamed(context, '/doctor-patients');
-    } else if (index == 1) {
-      // Already on appointments screen, no action needed
     } else if (index == 2) {
       Navigator.pushNamed(context, '/doctor-profile');
     }
@@ -184,140 +175,189 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            onPressed: _fetchAppointments,
+          ),
+        ],
       ),
       body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4DB6AC)),
-                ),
-              )
-            : _errorMessage != null
-            ? Center(
-                child: Text(
-                  _errorMessage!,
-                  style: GoogleFonts.poppins(
-                    color: const Color(0xFFFF7043),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(isTablet ? 24.0 : 16.0),
+              child: DropdownButton<String>(
+                value: _selectedFilter,
+                isExpanded: true,
+                hint: Text('Filter Appointments', style: GoogleFonts.poppins()),
+                items: const [
+                  DropdownMenuItem(value: 'all', child: Text('All')),
+                  DropdownMenuItem(
+                    value: 'confirmed',
+                    child: Text('Confirmed'),
                   ),
-                ),
-              )
-            : _appointments.isEmpty
-            ? Center(
-                child: Text(
-                  'No appointments found.',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
-                ),
-              )
-            : ListView.builder(
-                padding: EdgeInsets.all(isTablet ? 24.0 : 16.0),
-                itemCount: _appointments.length,
-                itemBuilder: (context, index) {
-                  final appt = _appointments[index];
-                  return Card(
-                    elevation: 4,
-                    margin: const EdgeInsets.only(bottom: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(
-                        color: Color(0xFF3F51B5),
-                        width: 1,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'ID: ${appt['id']}',
-                                style: GoogleFonts.poppins(
-                                  fontSize: isTablet ? 16 : 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                appt['status'].toString().toUpperCase(),
-                                style: GoogleFonts.poppins(
-                                  fontSize: isTablet ? 14 : 12,
-                                  color: appt['status'] == 'done'
-                                      ? Colors.green
-                                      : appt['status'] == 'cancelled'
-                                      ? Colors.red
-                                      : Colors.orange,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Patient: ${appt['user']?['name'] ?? 'N/A'}',
-                            style: GoogleFonts.poppins(
-                              fontSize: isTablet ? 16 : 14,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Date: ${DateTime.parse(appt['date']).toLocal().toString().split(' ')[0]}',
-                            style: GoogleFonts.poppins(
-                              fontSize: isTablet ? 14 : 12,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Time: ${appt['heure'] ?? 'N/A'}',
-                            style: GoogleFonts.poppins(
-                              fontSize: isTablet ? 14 : 12,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          DropdownButton<String>(
-                            value: appt['status'],
-                            isExpanded: true,
-                            hint: Text(
-                              'Select Status',
-                              style: GoogleFonts.poppins(),
-                            ),
-                            items: const [
-                              DropdownMenuItem(
-                                value: '',
-                                child: Text('Select'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'done',
-                                child: Text('Done'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'cancelled',
-                                child: Text('Cancelled'),
-                              ),
-                            ],
-                            onChanged:
-                                ['done', 'cancelled'].contains(appt['status'])
-                                ? null
-                                : (value) {
-                                    if (value != null && value.isNotEmpty) {
-                                      _updateStatus(appt['id'], value);
-                                    }
-                                  },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  DropdownMenuItem(value: 'done', child: Text('Done')),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedFilter = value;
+                      _applyFilter();
+                    });
+                  }
                 },
               ),
+            ),
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xFF4DB6AC),
+                        ),
+                      ),
+                    )
+                  : _errorMessage != null
+                  ? Center(
+                      child: Text(
+                        _errorMessage!,
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFFFF7043),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  : _filteredAppointments.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No appointments found.',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.all(isTablet ? 24.0 : 16.0),
+                      itemCount: _filteredAppointments.length,
+                      itemBuilder: (context, index) {
+                        final appt = _filteredAppointments[index];
+                        return Card(
+                          elevation: 4,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(
+                              color: appt['status'] == 'confirmed'
+                                  ? Colors.blueAccent
+                                  : const Color(0xFF3F51B5),
+                              width: 2,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'ID: ${appt['id']}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: isTablet ? 16 : 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      appt['status'].toString().toUpperCase(),
+                                      style: GoogleFonts.poppins(
+                                        fontSize: isTablet ? 14 : 12,
+                                        color: appt['status'] == 'done'
+                                            ? Colors.green
+                                            : appt['status'] == 'cancelled'
+                                            ? Colors.red
+                                            : appt['status'] == 'confirmed'
+                                            ? Colors.blueAccent
+                                            : Colors.orange,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Patient: ${appt['user']?['name'] ?? 'N/A'}',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: isTablet ? 16 : 14,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Date: ${DateTime.parse(appt['date']).toLocal().toString().split(' ')[0]}',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: isTablet ? 14 : 12,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Time: ${appt['heure'] ?? 'N/A'}',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: isTablet ? 14 : 12,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                DropdownButton<String>(
+                                  value: appt['status'],
+                                  isExpanded: true,
+                                  hint: Text(
+                                    'Select Status',
+                                    style: GoogleFonts.poppins(),
+                                  ),
+                                  items: [
+                                    if (appt['status'] == 'confirmed')
+                                      const DropdownMenuItem(
+                                        value: 'confirmed',
+                                        child: Text('Confirmed'),
+                                      ),
+                                    const DropdownMenuItem(
+                                      value: 'done',
+                                      child: Text('Done'),
+                                    ),
+                                    const DropdownMenuItem(
+                                      value: 'cancelled',
+                                      child: Text('Cancelled'),
+                                    ),
+                                  ],
+                                  onChanged:
+                                      [
+                                        'done',
+                                        'cancelled',
+                                      ].contains(appt['status'])
+                                      ? null
+                                      : (value) {
+                                          if (value != null &&
+                                              value.isNotEmpty &&
+                                              value != 'confirmed') {
+                                            _updateStatus(appt['id'], value);
+                                          }
+                                        },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(

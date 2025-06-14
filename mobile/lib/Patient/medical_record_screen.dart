@@ -19,8 +19,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
   List<dynamic> _medicalRecords = [];
   bool _isLoading = false;
   int _selectedIndex = 2; // Profile selected by default
-  final String baseUrl =
-      'http://192.168.1.2:8000/api';
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
   @override
   void initState() {
     super.initState();
@@ -87,9 +86,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse(
-          '$baseUrl/user/ordonnances/$ordonnanceId/pdf',
-        ),
+        Uri.parse('$baseUrl/user/ordonnances/$ordonnanceId/pdf'),
         headers: {'Authorization': 'Bearer $token'},
       );
 

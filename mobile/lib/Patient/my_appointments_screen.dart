@@ -18,7 +18,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
   String? _errorMessage;
   int _selectedIndex = 2; // Profile selected by default
    final String baseUrl =
-      'http://192.168.1.2:8000/api';
+      'https://api-meditro.x10.mx/api';
   @override
   void initState() {
     super.initState();

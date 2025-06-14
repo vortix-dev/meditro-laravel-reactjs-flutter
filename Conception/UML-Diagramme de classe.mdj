@@ -6521,7 +6521,8 @@
 								"name": "1",
 								"reference": {
 									"$ref": "AAAAAAGXOL+jr3ud+q8="
-								}
+								},
+								"aggregation": "composite"
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
@@ -7024,7 +7025,8 @@
 								"name": "1",
 								"reference": {
 									"$ref": "AAAAAAGXXbYblhmtN90="
-								}
+								},
+								"aggregation": "composite"
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",

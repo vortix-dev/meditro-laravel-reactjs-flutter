@@ -27,7 +27,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   int _selectedIndex = 1; // Book selected by default
   bool _isButtonPressed = false;
    final String baseUrl =
-      'http://192.168.1.2:8000/api';
+      'https://api-meditro.x10.mx/api';
   @override
   void initState() {
     super.initState();

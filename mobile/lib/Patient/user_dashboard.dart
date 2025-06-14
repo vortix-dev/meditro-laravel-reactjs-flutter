@@ -19,8 +19,8 @@ class _UserDashboardState extends State<UserDashboard> {
   String? _errorMessage;
   bool _isBookButtonPressed = false;
   int _selectedIndex = 0;
-   final String baseUrl =
-      'http://192.168.1.2:8000/api';
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
+
   @override
   void initState() {
     super.initState();
@@ -75,9 +75,9 @@ class _UserDashboardState extends State<UserDashboard> {
     });
   }
 
-  String _getServiceName(int serviceId) {
+  String _getServiceName(String serviceId) {
     final service = _services.firstWhere(
-      (s) => s['id'] == serviceId,
+      (s) => s['id'].toString() == serviceId,
       orElse: () => {'name': 'Unknown'},
     );
     return service['name'];
@@ -252,7 +252,7 @@ class _UserDashboardState extends State<UserDashboard> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
-                                shadowColor: null,
+                                shadowColor: Colors.transparent,
                                 padding: EdgeInsets.symmetric(
                                   vertical: isTablet ? 18 : 14,
                                 ),
@@ -278,7 +278,7 @@ class _UserDashboardState extends State<UserDashboard> {
                         style: GoogleFonts.poppins(
                           fontSize: isTablet ? 22 : 16,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: const Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                       const SizedBox(height: 16),

@@ -16,7 +16,7 @@ class AuthProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   final String baseUrl =
-      'http://192.168.1.2:8000/api'; // Replace with your API URL
+      'https://api-meditro.x10.mx/api'; // Replace with your API URL
 
   Future<bool> register({
     required String name,

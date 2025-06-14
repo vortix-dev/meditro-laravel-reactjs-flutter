@@ -16,8 +16,7 @@ class _DoctorPatientsState extends State<DoctorPatients> {
   List<dynamic> _patients = [];
   bool _isLoading = false;
   String? _errorMessage;
-   final String baseUrl =
-      'http://192.168.1.2:8000/api';
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
 
   @override
   void initState() {
