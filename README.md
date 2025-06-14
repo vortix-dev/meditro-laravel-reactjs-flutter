@@ -1,6 +1,6 @@
-# 🩺 Meditone - Medical Cabinet Management System
+# 🩺 Meditrone - Medical Cabinet Management System
 
-**Meditone** is a cross-platform medical appointment management system developed using **Laravel**, **Flutter**, and **ReactJS**. It provides a seamless experience for both patients and doctors via a mobile application, and a powerful web-based dashboard with role-based access for administration and clinic staff.
+**Meditrone** is a cross-platform medical appointment management system developed using **Laravel**, **Flutter**, and **ReactJS**. It provides a seamless experience for both patients and doctors via a mobile application, and a powerful web-based dashboard with role-based access for administration and clinic staff.
 
 ## 📱 Mobile App (Flutter)
 
