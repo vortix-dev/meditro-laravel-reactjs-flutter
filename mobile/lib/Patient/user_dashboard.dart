@@ -87,87 +87,17 @@ class _UserDashboardState extends State<UserDashboard> {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 2) {
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(
-                  Icons.calendar_today,
-                  color: Color(0xFF3F51B5),
-                ),
-                title: Text(
-                  'My Appointments',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/my-appointments');
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.medical_services,
-                  color: Color(0xFF3F51B5),
-                ),
-                title: Text(
-                  'My Medical Record',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/medical-record');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout, color: Color(0xFF3F51B5)),
-                title: Text(
-                  'Logout',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Provider.of<AuthProvider>(context, listen: false).logout();
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-              ),
-            ],
-          ),
-        ),
-      );
+
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/user');
     } else if (index == 1) {
       Navigator.pushNamed(
         context,
         '/book-appointment',
         arguments: {'services': _services},
       );
+    } else if (index == 2) {
+      Navigator.pushReplacementNamed(context, '/patient-profile');
     }
   }
 
@@ -177,48 +107,98 @@ class _UserDashboardState extends State<UserDashboard> {
     final isTablet = screenWidth > 600;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4DB6AC)),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false, // enlève le bouton retour
+        title: Image.asset('assets/logo.png', height: 50),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/Backgroundelapps.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+          SafeArea(
+            child: Stack(
+              children: [
+                // FORMES dans les 4 coins
+                Positioned(
+                  top: 100,
+                  left: 50,
+                  child: Image.asset('assets/imgForm/forme5.png', width: 80),
                 ),
-              )
-            : _errorMessage != null
-            ? Center(
-                child: Text(
-                  _errorMessage!,
-                  style: GoogleFonts.poppins(
-                    color: Color(0xFFFF7043),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Positioned(
+                  top: 370,
+                  right: 20,
+                  child: Image.asset('assets/imgForm/forme4.png', width: 140),
                 ),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(isTablet ? 32.0 : 24.0),
+                Positioned(
+                  bottom: 280,
+                  left: 0,
+                  child: Image.asset('assets/imgForm/forme1.png', width: 80),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Image.asset('assets/imgForm/forme3.png', width: 80),
+                ),
+                Positioned(
+                  bottom: 50,
+                  left: 0,
+                  child: Image.asset('assets/imgForm/forme2.png', width: 80),
+                ),
+
+                // CONTENU PRINCIPAL
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'MediTone',
-                        style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 36 : 32,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                      const SizedBox(height: 40),
+
+                      // IMAGE CENTRALE
+                      Center(
+                        child: Image.asset(
+                          'assets/imgDoctor/DoctorHeader.png',
+                          width: 300,
+                          fit: BoxFit.contain,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Your Healthcare Companion',
-                        style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 18 : 16,
-                          color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
-                        ),
-                      ),
+
                       const SizedBox(height: 24),
+
+                      // TITRE
+                      Text(
+                        'Votre santé Mérite Tout Notre Attention',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3F51B5), // Bleu
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // TEXTE D’ACCUEIL
+                      Text(
+                        'Bienvenue sur Meditro, votre application de prise de rendez-vous simple et rapide avec notre cabinet médical. En quelques clics, choisissez le créneau qui vous convient et recevez un rappel avant votre consultation. Plus besoin d’attendre au téléphone — Meditro vous simplifie la santé, avec attention et proximité.',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // BOUTON RENDEZ-VOUS
                       GestureDetector(
                         onTapDown: (_) =>
                             setState(() => _isBookButtonPressed = true),
@@ -231,8 +211,9 @@ class _UserDashboardState extends State<UserDashboard> {
                           duration: const Duration(milliseconds: 100),
                           child: Container(
                             width: double.infinity,
+                            height: 80,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF3F51B5),
+                              color: const Color.fromARGB(255, 241, 120, 50),
                               borderRadius: BorderRadius.circular(8),
                               boxShadow: [
                                 BoxShadow(
@@ -261,10 +242,10 @@ class _UserDashboardState extends State<UserDashboard> {
                                 ),
                               ),
                               child: Text(
-                                'Book Appointment',
-                                style: GoogleFonts.poppins(
-                                  fontSize: isTablet ? 18 : 16,
-                                  fontWeight: FontWeight.bold,
+                                'Demander un Rendez-vous',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: isTablet ? 23 : 20,
+                                  fontWeight: FontWeight.w500,
                                   color: Colors.white,
                                 ),
                               ),
@@ -272,18 +253,22 @@ class _UserDashboardState extends State<UserDashboard> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+
+                      const SizedBox(height: 34),
+
+                      // SERVICES
                       Text(
                         'Services',
                         style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 22 : 16,
+                          fontSize: isTablet ? 30 : 28,
                           fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: const Color.fromARGB(255, 241, 120, 50),
                         ),
                       ),
                       const SizedBox(height: 16),
+
                       SizedBox(
-                        height: isTablet ? 180 : 140,
+                        height: isTablet ? 200 : 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: _services.length,
@@ -303,59 +288,66 @@ class _UserDashboardState extends State<UserDashboard> {
                                   ),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(12),
-                                      ),
-                                      child: service['img'] != null
-                                          ? Image.network(
-                                              service['img'],
-                                              width: double.infinity,
-                                              height: isTablet ? 100 : 80,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (
-                                                    context,
-                                                    error,
-                                                    stackTrace,
-                                                  ) => Container(
+                                    Expanded(
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 8,
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            child: service['img'] != null
+                                                ? Image.network(
+                                                    service['img'],
+                                                    width: isTablet ? 100 : 80,
+                                                    height: isTablet ? 100 : 80,
+                                                    fit: BoxFit.contain,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          _,
+                                                        ) => Container(
+                                                          width: isTablet
+                                                              ? 100
+                                                              : 80,
+                                                          height: isTablet
+                                                              ? 100
+                                                              : 80,
+                                                          color:
+                                                              Colors.grey[300],
+                                                          child: const Icon(
+                                                            Icons.broken_image,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                  )
+                                                : Container(
+                                                    width: isTablet ? 100 : 80,
                                                     height: isTablet ? 100 : 80,
                                                     color: Colors.grey[300],
                                                     child: const Icon(
-                                                      Icons.broken_image,
-                                                      color: Color.fromARGB(
-                                                        255,
-                                                        0,
-                                                        0,
-                                                        0,
-                                                      ),
+                                                      Icons.medical_services,
+                                                      color: Colors.grey,
                                                     ),
                                                   ),
-                                            )
-                                          : Container(
-                                              height: isTablet ? 100 : 80,
-                                              color: Colors.grey[300],
-                                              child: const Icon(
-                                                Icons.medical_services,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         service['name'],
+                                        textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
                                           fontSize: isTablet ? 18 : 16,
                                           fontWeight: FontWeight.w600,
-                                          color: const Color.fromARGB(
-                                            255,
-                                            0,
-                                            0,
-                                            0,
-                                          ),
+                                          color: const Color(0xFF3F51B5),
                                         ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -368,18 +360,22 @@ class _UserDashboardState extends State<UserDashboard> {
                           },
                         ),
                       ),
+
                       const SizedBox(height: 24),
+
+                      // DOCTEURS
                       Text(
                         'Doctors',
                         style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 22 : 16,
+                          fontSize: isTablet ? 30 : 28,
                           fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: const Color.fromARGB(255, 241, 120, 50),
                         ),
                       ),
                       const SizedBox(height: 16),
+
                       SizedBox(
-                        height: isTablet ? 140 : 120,
+                        height: isTablet ? 160 : 140,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: _doctors.length,
@@ -401,35 +397,27 @@ class _UserDashboardState extends State<UserDashboard> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         doctor['name'],
+                                        textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
-                                          fontSize: isTablet ? 18 : 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: const Color.fromARGB(
-                                            255,
-                                            0,
-                                            0,
-                                            0,
-                                          ),
+                                          fontSize: isTablet ? 20 : 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF3F51B5),
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      const SizedBox(height: 4),
+                                      const SizedBox(height: 8),
                                       Text(
                                         'Service: ${_getServiceName(doctor['service_id'])}',
+                                        textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
                                           fontSize: isTablet ? 16 : 14,
-                                          color: const Color.fromARGB(
-                                            255,
-                                            0,
-                                            0,
-                                            0,
-                                          ).withOpacity(0.7),
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87,
                                         ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -445,37 +433,40 @@ class _UserDashboardState extends State<UserDashboard> {
                     ],
                   ),
                 ),
-              ),
+              ],
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF3F51B5),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
+
+      // ✅ BottomNavigationBar
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onNavItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(
+          0xFF565ACF,
+        ), // même couleur que la deuxième
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedIconTheme: const IconThemeData(size: 32),
+        unselectedIconTheme: const IconThemeData(size: 28),
+        selectedLabelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w500,
+          fontSize: 12,
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavItemTapped,
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          selectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          unselectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book_rounded),
-              label: 'Book',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
+        unselectedLabelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
         ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book_rounded),
+            label: 'Réserver',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }

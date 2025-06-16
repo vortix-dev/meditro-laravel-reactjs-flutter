@@ -26,8 +26,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   String? _successMessage;
   int _selectedIndex = 1; // Book selected by default
   bool _isButtonPressed = false;
-   final String baseUrl =
-      'https://api-meditro.x10.mx/api';
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
   @override
   void initState() {
     super.initState();
@@ -109,9 +108,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse(
-          '$baseUrl/user/medecins/$_selectedServiceId',
-        ),
+        Uri.parse('$baseUrl/user/medecins/$_selectedServiceId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -287,89 +284,17 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 2) {
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 8,
-                offset: Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(
-                  Icons.calendar_today,
-                  color: Color(0xFF3F51B5),
-                ),
-                title: Text(
-                  'My Appointments',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/my-appointments');
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.medical_services,
-                  color: Color(0xFF3F51B5),
-                ),
-                title: Text(
-                  'My Medical Record',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/medical-record');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout, color: Color(0xFF3F51B5)),
-                title: Text(
-                  'Logout',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Provider.of<AuthProvider>(context, listen: false).logout();
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-              ),
-            ],
-          ),
-        ),
-      );
+
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/user');
     } else if (index == 1) {
       Navigator.pushReplacementNamed(
         context,
         '/book-appointment',
         arguments: {'services': _services},
       );
-    } else if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/user');
+    } else if (index == 2) {
+      Navigator.pushReplacementNamed(context, '/patient-profile');
     }
   }
 
@@ -377,350 +302,347 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth > 600;
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF3F51B5),
-        title: Text(
-          'Book Appointment',
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pushReplacementNamed(context, '/user'),
-          tooltip: 'Back to Dashboard',
-        ),
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false, // enlève le bouton retour
+        title: Image.asset('assets/logo.png', height: 50),
       ),
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4DB6AC)),
-                ),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(isTablet ? 32.0 : 24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (_errorMessage != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text(
-                            _errorMessage!,
-                            style: GoogleFonts.poppins(
-                              fontSize: isTablet ? 16 : 14,
-                              color: const Color(0xFFFF7043),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      if (_successMessage != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text(
-                            _successMessage!,
-                            style: GoogleFonts.poppins(
-                              fontSize: isTablet ? 16 : 14,
-                              color: const Color(0xFF4DB6AC),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      Text(
-                        'Select Service',
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/Backgroundelapps.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(isTablet ? 32.0 : 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    // Nouveau titre principal
+                    Center(
+                      child: Text(
+                        'Demandez un Rendez-Vous',
                         style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 18 : 16,
-                          fontWeight: FontWeight.w600,
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          fontSize: isTablet ? 32 : 25,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3F51B5),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Color(0xFF3F51B5),
-                            width: 1,
-                          ),
-                        ),
-                        child: DropdownButton<int>(
-                          isExpanded: true,
-                          value: _selectedServiceId,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedServiceId = value;
-                              _fetchDoctors();
-                            });
-                          },
-                          items: _services.map((service) {
-                            return DropdownMenuItem<int>(
-                              value: service['id'],
-                              child: Semantics(
-                                label: 'Service: ${service['name']}',
-                                child: Text(
-                                  service['name'],
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 16 : 14,
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          hint: Semantics(
-                            label: 'Select service',
-                            child: Text(
-                              'Select Service',
-                              style: GoogleFonts.poppins(
-                                fontSize: isTablet ? 14 : 12,
-                                color: const Color.fromARGB(
-                                  255,
-                                  0,
-                                  0,
-                                  0,
-                                ).withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                          underline: const SizedBox(),
-                          dropdownColor: const Color(0xFFF5F5F5),
+                    ),
+                    const SizedBox(height: 24),
+
+                    if (_errorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Text(
+                          _errorMessage!,
                           style: GoogleFonts.poppins(
                             fontSize: isTablet ? 16 : 14,
-                            color: Colors.black54,
-                          ),
-                          icon: const Icon(
-                            Icons.arrow_drop_down,
-                            color: Color(0xFF3F51B5),
+                            color: const Color(0xFFFF7043),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Select Doctor',
-                        style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 18 : 16,
-                          fontWeight: FontWeight.w600,
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Color(0xFF3F51B5),
-                            width: 1,
-                          ),
-                        ),
-                        child: DropdownButton<int>(
-                          isExpanded: true,
-                          value: _selectedDoctorId,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedDoctorId = value;
-                            });
-                          },
-                          items: _doctors.map((doctor) {
-                            return DropdownMenuItem<int>(
-                              value: doctor['id'],
-                              child: Semantics(
-                                label: 'Doctor: ${doctor['name']}',
-                                child: Text(
-                                  doctor['name'],
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 16 : 14,
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          hint: Semantics(
-                            label: 'Select doctor',
-                            child: Text(
-                              'Select Doctor',
-                              style: GoogleFonts.poppins(
-                                fontSize: isTablet ? 14 : 12,
-                                color: const Color.fromARGB(
-                                  255,
-                                  0,
-                                  0,
-                                  0,
-                                ).withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                          underline: const SizedBox(),
-                          dropdownColor: const Color(0xFFF5F5F5),
+                    if (_successMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Text(
+                          _successMessage!,
                           style: GoogleFonts.poppins(
                             fontSize: isTablet ? 16 : 14,
-                            color: Colors.black54,
-                          ),
-                          icon: const Icon(
-                            Icons.arrow_drop_down,
-                            color: Color(0xFF3F51B5),
+                            color: const Color(0xFF4DB6AC),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Select Date',
-                        style: GoogleFonts.poppins(
-                          fontSize: isTablet ? 18 : 16,
-                          fontWeight: FontWeight.w600,
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
+
+                    // Titre français orange
+                    Text(
+                      'Sélectionner un service',
+                      style: GoogleFonts.poppins(
+                        fontSize: isTablet ? 18 : 16,
+                        fontWeight: FontWeight.w600,
+                        color: const Color.fromARGB(255, 241, 120, 50),
                       ),
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTapDown: (_) =>
-                            setState(() => _isButtonPressed = true),
-                        onTapUp: (_) =>
-                            setState(() => _isButtonPressed = false),
-                        onTapCancel: () =>
-                            setState(() => _isButtonPressed = false),
-                        onTap: () => _selectDate(context),
-                        child: AnimatedScale(
-                          scale: _isButtonPressed ? 0.95 : 1.0,
-                          duration: const Duration(milliseconds: 100),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 16,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Color(0xFF3F51B5), width: 1),
+                      ),
+                      child: DropdownButton<int>(
+                        isExpanded: true,
+                        value: _selectedServiceId,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedServiceId = value;
+                            _fetchDoctors();
+                          });
+                        },
+                        items: _services.map((service) {
+                          return DropdownMenuItem<int>(
+                            value: service['id'],
+                            child: Semantics(
+                              label: 'Service: ${service['name']}',
+                              child: Text(
+                                service['name'],
+                                style: GoogleFonts.poppins(
+                                  fontSize: isTablet ? 16 : 14,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF5F5F5),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Color(0xFF3F51B5),
-                                width: 1,
+                          );
+                        }).toList(),
+                        hint: Semantics(
+                          label: 'Select service',
+                          child: Text(
+                            'Select Service',
+                            style: GoogleFonts.poppins(
+                              fontSize: isTablet ? 14 : 12,
+                              color: const Color.fromARGB(
+                                255,
+                                0,
+                                0,
+                                0,
+                              ).withOpacity(0.7),
+                            ),
+                          ),
+                        ),
+                        underline: const SizedBox(),
+                        dropdownColor: const Color(0xFFF5F5F5),
+                        style: GoogleFonts.poppins(
+                          fontSize: isTablet ? 16 : 14,
+                          color: Colors.black54,
+                        ),
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: Color(0xFF3F51B5),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Sélectionner un médecin',
+                      style: GoogleFonts.poppins(
+                        fontSize: isTablet ? 18 : 16,
+                        fontWeight: FontWeight.w600,
+                        color: const Color.fromARGB(255, 241, 120, 50),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Color(0xFF3F51B5), width: 1),
+                      ),
+                      child: DropdownButton<int>(
+                        isExpanded: true,
+                        value: _selectedDoctorId,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDoctorId = value;
+                          });
+                        },
+                        items: _doctors.map((doctor) {
+                          return DropdownMenuItem<int>(
+                            value: doctor['id'],
+                            child: Semantics(
+                              label: 'Doctor: ${doctor['name']}',
+                              child: Text(
+                                doctor['name'],
+                                style: GoogleFonts.poppins(
+                                  fontSize: isTablet ? 16 : 14,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        hint: Semantics(
+                          label: 'Select doctor',
+                          child: Text(
+                            'Select Doctor',
+                            style: GoogleFonts.poppins(
+                              fontSize: isTablet ? 14 : 12,
+                              color: const Color.fromARGB(
+                                255,
+                                0,
+                                0,
+                                0,
+                              ).withOpacity(0.7),
+                            ),
+                          ),
+                        ),
+                        underline: const SizedBox(),
+                        dropdownColor: const Color(0xFFF5F5F5),
+                        style: GoogleFonts.poppins(
+                          fontSize: isTablet ? 16 : 14,
+                          color: Colors.black54,
+                        ),
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: Color(0xFF3F51B5),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Select Date',
+                      style: GoogleFonts.poppins(
+                        fontSize: isTablet ? 18 : 16,
+                        fontWeight: FontWeight.w600,
+                        color: const Color.fromARGB(255, 241, 120, 50),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTapDown: (_) => setState(() => _isButtonPressed = true),
+                      onTapUp: (_) => setState(() => _isButtonPressed = false),
+                      onTapCancel: () =>
+                          setState(() => _isButtonPressed = false),
+                      onTap: () => _selectDate(context),
+                      child: AnimatedScale(
+                        scale: _isButtonPressed ? 0.95 : 1.0,
+                        duration: const Duration(milliseconds: 100),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Color(0xFF3F51B5),
+                              width: 1,
+                            ),
+                          ),
+                          child: Semantics(
+                            label: _selectedDate == null
+                                ? 'Select appointment date'
+                                : 'Selected date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
+                            child: Text(
+                              _selectedDate == null
+                                  ? 'Choose Date'
+                                  : DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(_selectedDate!),
+                              style: GoogleFonts.poppins(
+                                fontSize: isTablet ? 16 : 14,
+                                color: _selectedDate == null
+                                    ? const Color.fromARGB(
+                                        255,
+                                        0,
+                                        0,
+                                        0,
+                                      ).withOpacity(0.7)
+                                    : const Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTapDown: (_) => setState(() => _isButtonPressed = true),
+                      onTapUp: (_) => setState(() => _isButtonPressed = false),
+                      onTapCancel: () =>
+                          setState(() => _isButtonPressed = false),
+                      onTap: _bookAppointment,
+                      child: AnimatedScale(
+                        scale: _isButtonPressed ? 0.95 : 1.0,
+                        duration: const Duration(milliseconds: 100),
+                        child: Container(
+                          width: double.infinity,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 241, 120, 50),
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: _bookAppointment,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             child: Semantics(
-                              label: _selectedDate == null
-                                  ? 'Select appointment date'
-                                  : 'Selected date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
+                              label: 'Confirmer le rendez-vous',
                               child: Text(
-                                _selectedDate == null
-                                    ? 'Choose Date'
-                                    : DateFormat(
-                                        'yyyy-MM-dd',
-                                      ).format(_selectedDate!),
-                                style: GoogleFonts.poppins(
-                                  fontSize: isTablet ? 16 : 14,
-                                  color: _selectedDate == null
-                                      ? const Color.fromARGB(
-                                          255,
-                                          0,
-                                          0,
-                                          0,
-                                        ).withOpacity(0.7)
-                                      : const Color.fromARGB(255, 0, 0, 0),
+                                'Confirmer le rendez-vous',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: isTablet ? 23 : 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTapDown: (_) =>
-                            setState(() => _isButtonPressed = true),
-                        onTapUp: (_) =>
-                            setState(() => _isButtonPressed = false),
-                        onTapCancel: () =>
-                            setState(() => _isButtonPressed = false),
-                        onTap: _bookAppointment,
-                        child: AnimatedScale(
-                          scale: _isButtonPressed ? 0.95 : 1.0,
-                          duration: const Duration(milliseconds: 100),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF3F51B5),
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: ElevatedButton(
-                              onPressed: _bookAppointment,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: Semantics(
-                                label: 'Confirm appointment',
-                                child: Text(
-                                  'Confirm Appointment',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 18 : 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF3F51B5),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onNavItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(
+          0xFF565ACF,
+        ), // même couleur que la deuxième
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedIconTheme: const IconThemeData(size: 32),
+        unselectedIconTheme: const IconThemeData(size: 28),
+        selectedLabelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w500,
+          fontSize: 12,
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavItemTapped,
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          selectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          unselectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book_rounded),
-              label: 'Book',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
+        unselectedLabelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
         ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book_rounded),
+            label: 'Réserver',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }
