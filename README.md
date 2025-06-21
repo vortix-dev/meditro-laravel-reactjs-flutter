@@ -1,4 +1,4 @@
-# 🩺 Meditrone - Medical Cabinet Management System
+# 🩺 Meditro - Medical Cabinet Management System
 
 **Meditrone** is a cross-platform medical appointment management system developed using **Laravel**, **Flutter**, and **ReactJS**. It provides a seamless experience for both patients and doctors via a mobile application, and a powerful web-based dashboard with role-based access for administration and clinic staff.
 
