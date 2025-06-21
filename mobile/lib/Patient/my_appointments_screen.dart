@@ -16,9 +16,10 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
   List<dynamic> _appointments = [];
   bool _isLoading = false;
   String? _errorMessage;
-  int _selectedIndex = 2; // Profile selected by default
-   final String baseUrl =
-      'https://api-meditro.x10.mx/api';
+  int _selectedIndex = 2;
+  final String baseUrl =
+      'http://192.168.43.161:8000/api'; // Use .env for production
+
   @override
   void initState() {
     super.initState();
@@ -31,8 +32,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
       _errorMessage = null;
     });
 
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final token = authProvider.token;
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
 
     try {
       final response = await http.get(
@@ -44,28 +44,37 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          _appointments = data['data'];
-          _isLoading = false;
-        });
+        try {
+          final data = json.decode(response.body);
+          setState(() {
+            _appointments = data['data'] ?? [];
+            _isLoading = false;
+          });
+        } catch (e) {
+          setState(() {
+            _errorMessage = 'Invalid server response. Please try again.';
+            _isLoading = false;
+          });
+          _showSnackBar(_errorMessage!);
+        }
       } else {
         setState(() {
-          _errorMessage = 'Failed to load appointments';
+          _errorMessage = 'Erreur lors du chargement des rendez-vous';
           _isLoading = false;
         });
+        _showSnackBar(_errorMessage!);
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'An error occurred. Please try again.';
+        _errorMessage = 'Une erreur est survenue. Vérifiez votre connexion.';
         _isLoading = false;
       });
+      _showSnackBar(_errorMessage!);
     }
   }
 
   Future<void> _cancelAppointment(int id) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final token = authProvider.token;
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
 
     setState(() {
       _isLoading = true;
@@ -82,269 +91,290 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              data['message'] ?? 'Appointment cancelled successfully',
-              style: GoogleFonts.poppins(color: Colors.white),
+        try {
+          final data = json.decode(response.body);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                data['message'] ?? 'Annulation réussie',
+                style: GoogleFonts.poppins(color: Colors.white),
+              ),
+              backgroundColor: const Color(0xFF4DB6AC),
             ),
-            backgroundColor: Color(0xFF4DB6AC),
-          ),
-        );
-        _fetchAppointments();
+          );
+          await _fetchAppointments();
+        } catch (e) {
+          setState(() {
+            _errorMessage = 'Invalid server response. Please try again.';
+            _isLoading = false;
+          });
+          _showSnackBar(_errorMessage!);
+        }
       } else {
-        final data = json.decode(response.body);
-        setState(() {
-          _errorMessage = data['message'] ?? 'Failed to cancel appointment';
-          _isLoading = false;
-        });
+        try {
+          final data = json.decode(response.body);
+          setState(() {
+            _errorMessage = data['message'] ?? 'Erreur lors de l’annulation';
+            _isLoading = false;
+          });
+          _showSnackBar(_errorMessage!);
+        } catch (e) {
+          setState(() {
+            _errorMessage = 'Invalid server response. Please try again.';
+            _isLoading = false;
+          });
+          _showSnackBar(_errorMessage!);
+        }
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'An error occurred. Please try again.';
+        _errorMessage = 'Une erreur est survenue lors de l’annulation.';
         _isLoading = false;
       });
+      _showSnackBar(_errorMessage!);
     }
   }
 
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: const Color(0xFFFF7043),
+      ),
+    );
+  }
+
   void _onNavItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    if (index == 2) {
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(
-                  Icons.calendar_today,
-                  color: Color(0xFF3F51B5),
-                ),
-                title: Text(
-                  'My Appointments',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.medical_services,
-                  color: Color(0xFF3F51B5),
-                ),
-                title: Text(
-                  'My Medical Record',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/medical-record');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout, color: Color(0xFF3F51B5)),
-                title: Text(
-                  'Logout',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Provider.of<AuthProvider>(context, listen: false).logout();
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-              ),
-            ],
-          ),
-        ),
-      );
+    if (index == _selectedIndex) return; // Prevent redundant navigation
+    setState(() => _selectedIndex = index);
+
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/user');
     } else if (index == 1) {
       Navigator.pushNamed(
         context,
         '/book-appointment',
         arguments: {'services': []},
       );
-    } else if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/user');
+    } else if (index == 2) {
+      // Already on MyAppointmentsScreen, show profile menu
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (_) => _buildProfileMenu(),
+      );
     }
+  }
+
+  Widget _buildProfileMenu() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8)],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildMenuItem(
+            Icons.calendar_today,
+            'Mes rendez-vous',
+            () => Navigator.pop(
+              context,
+            ), // No action needed, already on this screen
+          ),
+          _buildMenuItem(
+            Icons.medical_services,
+            'Mon dossier médical',
+            () => Navigator.pushNamed(context, '/medical-record'),
+          ),
+          _buildMenuItem(Icons.logout, 'Déconnexion', () {
+            Provider.of<AuthProvider>(context, listen: false).logout();
+            Navigator.pushReplacementNamed(context, '/login');
+          }),
+        ],
+      ),
+    );
+  }
+
+  ListTile _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: const Color(0xFF3F51B5)),
+      title: Text(
+        title,
+        style: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+      ),
+      onTap: onTap,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
+    final isTablet = MediaQuery.of(context).size.width > 600;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3F51B5),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF3F51B5)),
+          onPressed: () =>
+              Navigator.pushReplacementNamed(context, '/patient-profile'),
+        ),
+        centerTitle: true,
         title: Text(
-          'My Appointments',
+          'Mes rendez-vous',
           style: GoogleFonts.poppins(
-            fontSize: 18,
+            fontSize: 22,
+            color: const Color(0xFF3F51B5),
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pushReplacementNamed(context, '/user'),
-        ),
-        elevation: 0,
       ),
-      body: SafeArea(
-        child: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4DB6AC)),
-                ),
-              )
-            : _errorMessage != null
-            ? Center(
-                child: Text(
-                  _errorMessage!,
-                  style: GoogleFonts.poppins(
-                    color: Color(0xFFFF7043),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )
-            : _appointments.isEmpty
-            ? Center(
-                child: Text(
-                  'No appointments found',
-                  style: GoogleFonts.poppins(
-                    fontSize: isTablet ? 18 : 16,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-              )
-            : ListView.builder(
-                padding: EdgeInsets.all(isTablet ? 32.0 : 24.0),
-                itemCount: _appointments.length,
-                itemBuilder: (context, index) {
-                  final appointment = _appointments[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    child: Card(
-                      elevation: 2,
-                      color: Color(0xFFF5F5F5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: Color(0xFF3F51B5), width: 1),
-                      ),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: isTablet ? 12 : 8,
-                        ),
-                        title: Text(
-                          appointment['medecin']['name'],
-                          style: GoogleFonts.poppins(
-                            fontSize: isTablet ? 18 : 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF757575),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 4),
-                            Text(
-                              'Date: ${appointment['date']}',
-                              style: GoogleFonts.poppins(
-                                fontSize: isTablet ? 16 : 14,
-                                color: Color(0xFF757575).withOpacity(0.7),
-                              ),
-                            ),
-                            Text(
-                              'Status: ${appointment['status']}',
-                              style: GoogleFonts.poppins(
-                                fontSize: isTablet ? 16 : 14,
-                                color: appointment['status'] == 'pending'
-                                    ? Color(0xFF4DB6AC)
-                                    : Color(0xFF757575).withOpacity(0.7),
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: appointment['status'] == 'pending'
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.cancel,
-                                  color: Color(0xFFFF7043),
-                                  size: isTablet ? 28 : 24,
-                                ),
-                                onPressed: () =>
-                                    _cancelAppointment(appointment['id']),
-                              )
-                            : null,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/Backgroundelapps.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+          SafeArea(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _errorMessage != null
+                ? Center(
+                    child: Text(
+                      _errorMessage!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.red,
                       ),
                     ),
-                  );
-                },
-              ),
+                  )
+                : _appointments.isEmpty
+                ? Center(
+                    child: Text(
+                      'Aucun rendez-vous trouvé',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: const Color(0xFF3F51B5),
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.all(isTablet ? 32.0 : 24.0).clamp(
+                      EdgeInsets.zero,
+                      EdgeInsets.all(double.infinity),
+                    ), // Safe padding
+                    itemCount: _appointments.length,
+                    itemBuilder: (context, index) {
+                      final appointment = _appointments[index];
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        elevation: 3,
+                        color: Colors.white.withOpacity(0.95),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(
+                            color: Color(0xFF3F51B5),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16), // Safe padding
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                appointment['medecin']['name'] ??
+                                    'Médecin inconnu',
+                                style: GoogleFonts.poppins(
+                                  fontSize: isTablet ? 18 : 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF3F51B5),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Date : ${appointment['date'] ?? 'N/A'}',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                'Heure : ${appointment['heure'] ?? 'Non spécifiée'}', // Added time display
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                'Status : ${appointment['status'] ?? 'N/A'}',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: appointment['status'] == 'pending'
+                                      ? const Color(0xFFFFA726)
+                                      : Colors.green,
+                                ),
+                              ),
+                              if (appointment['status'] == 'pending')
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: TextButton.icon(
+                                    onPressed: () =>
+                                        _cancelAppointment(appointment['id']),
+                                    icon: const Icon(
+                                      Icons.cancel,
+                                      color: Colors.red,
+                                    ),
+                                    label: const Text(
+                                      'Annuler',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF3F51B5),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onNavItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF565ACF),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedIconTheme: const IconThemeData(size: 32),
+        unselectedIconTheme: const IconThemeData(size: 28),
+        selectedLabelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w500,
+          fontSize: 12,
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavItemTapped,
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          selectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          unselectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book_rounded),
-              label: 'Book',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
+        unselectedLabelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
         ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book_rounded),
+            label: 'Réserver',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }

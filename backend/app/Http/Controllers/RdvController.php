@@ -19,14 +19,36 @@ class RdvController extends Controller
         ], 200);
     }
 
-
     public function store(Request $request)
     {
         $validated = $request->validate([
             'medecin_id' => 'required|exists:medecins,id',
             'date' => 'required|date|after:today',
-            'status' => 'in:pending', 
+            'heure' => [
+                'required',
+                'regex:/^([0-1][0-9]|2[0-3]):00$/', // Validates HH:00 format
+                function ($attribute, $value, $fail) {
+                    $hour = (int) explode(':', $value)[0];
+                    if ($hour < 8 || $hour > 15) { // Allow 8:00 to 15:00 for 1-hour slots ending at 16:00
+                        $fail('The time must be between 08:00 and 15:00.');
+                    }
+                },
+            ],
+            'status' => 'in:pending',
         ]);
+
+        // Check if the time slot is already booked
+        $existingRdv = Rdv::where('medecin_id', $validated['medecin_id'])
+            ->where('date', $validated['date'])
+            ->where('heure', $validated['heure'])
+            ->exists();
+
+        if ($existingRdv) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'This time slot is already booked.',
+            ], 400);
+        }
 
         $validated['user_id'] = auth()->id();
 
@@ -34,7 +56,34 @@ class RdvController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => ' Appointment has been sent', // Appointment has been sent
+            'message' => 'Appointment has been sent',
+        ], 200);
+    }
+
+    // New method to fetch available time slots
+    public function getAvailableTimes(Request $request)
+    {
+        $validated = $request->validate([
+            'medecin_id' => 'required|exists:medecins,id',
+            'date' => 'required|date|after:today',
+        ]);
+
+        $bookedTimes = Rdv::where('medecin_id', $validated['medecin_id'])
+            ->where('date', $validated['date'])
+            ->pluck('heure')
+            ->toArray();
+
+        $allTimes = [];
+        for ($hour = 8; $hour <= 15; $hour++) {
+            $time = sprintf('%02d:00', $hour);
+            $allTimes[] = $time;
+        }
+
+        $availableTimes = array_diff($allTimes, $bookedTimes);
+
+        return response()->json([
+            'status' => 200,
+            'times' => array_values($availableTimes),
         ], 200);
     }
 
@@ -48,30 +97,20 @@ class RdvController extends Controller
 
     public function update(Request $request, $id)
     {
-        $rdv = Rdv::find($id);
+        $rdv = Rdv::findOrFail($id);
 
         $validated = $request->validate([
             'status' => 'required|in:confirmed,cancelled',
-            'date' => 'nullable|date|after:today',
-            'heure' => 'nullable|date_format:H:i:s',
         ]);
 
-        $updateData = ['status' => $validated['status']];
-
-        if (isset($validated['date'])) {
-            $updateData['date'] = $validated['date'];
-        }
-
-        if (isset($validated['heure'])) {
-            $updateData['heure'] = $validated['heure'];
-        }
-
-        $rdv->update($updateData);
+        $rdv->update([
+            'status' => $validated['status'],
+        ]);
 
         return response()->json([
             'status' => 200,
             'message' => 'Appointment status updated successfully',
-        ]);
+        ], 200);
     }
 
 

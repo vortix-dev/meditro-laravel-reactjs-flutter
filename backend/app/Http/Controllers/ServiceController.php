@@ -23,6 +23,7 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -33,7 +34,11 @@ class ServiceController extends Controller
         $data = $request->only('name');
 
         if ($request->hasFile('img')) {
-            $data['img'] = $request->file('img')->store('uploads/services', 'public');
+            // تخزين الصورة في مجلد public/uploads/services داخل storage
+            $path = $request->file('img')->store('uploads/services', 'public');
+
+            // إنشاء رابط مباشر للصورة
+            $data['img'] = asset('storage/' . $path);
         }
 
         $service = Service::create($data);
@@ -41,6 +46,7 @@ class ServiceController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Service created successfully.',
+            'data' => $service
         ], 200);
     }
 

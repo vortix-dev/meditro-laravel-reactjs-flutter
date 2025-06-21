@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meditro/Patient/PatientProfileScreen.dart';
 import 'package:provider/provider.dart';
 import 'Auth/auth_provider.dart';
 import 'Auth/login_screen.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/user': (context) => const UserDashboard(),
           '/doctor': (context) => const DoctorDashboard(),
+          '/patient-profile': (context) => const PatientProfileScreen(),
           '/my-appointments': (context) => const MyAppointmentsScreen(),
           '/medical-record': (context) => const MedicalRecordScreen(),
           '/doctor-patients': (context) => const DoctorPatients(),

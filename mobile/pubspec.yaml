@@ -28,8 +28,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/logo.jpg
-
+    - assets/logo.png
+    - assets/Backgroundelapps.jpg 
+    - assets/imgDoctor/DoctorHeader.png
+    - assets/imgDoctor/
+    - assets/imgForm/
+   
 flutter_icons:
   android: true
   ios: true

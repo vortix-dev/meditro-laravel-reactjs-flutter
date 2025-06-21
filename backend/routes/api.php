@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum', 'abilities:web'])->prefix('user')->group(stat
     Route::get('dossier-medical',[DossierMedicaleController::class , 'getMyDossier']);
     Route::get('/ordonnances/{id}/pdf', [OrdonnanceController::class, 'myOrdonnances']);
     Route::get('medecins/{id}',[MedecinController::class,'getMedecinByService']);
+    Route::get('/available-times', [RdvController::class, 'getAvailableTimes']);
 });
 Route::get('services', [ServiceController::class , 'index']);
 Route::get('medecins', [MedecinController::class , 'index']);

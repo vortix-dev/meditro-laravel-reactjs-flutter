@@ -26,8 +26,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
   bool _isCreateModalOpen = false;
   bool _isEditModalOpen = false;
   bool _isPrescriptionModalOpen = false;
-   final String baseUrl =
-      'https://api-meditro.x10.mx/api';
+  final String baseUrl = 'http://192.168.43.161:8000/api';
   final _formKey = GlobalKey<FormState>();
   final _diagnosticController = TextEditingController();
   final _groupeSanguinController = TextEditingController();
@@ -87,9 +86,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse(
-          '$baseUrl/medecin/get-dossier/${widget.userId}',
-        ),
+        Uri.parse('$baseUrl/medecin/get-dossier/${widget.userId}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -256,9 +253,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     try {
       print('Updating dossier with payload: ${json.encode(payload)}');
       final response = await http.put(
-        Uri.parse(
-          '$baseUrl/medecin/dossier-medicale/${widget.userId}',
-        ),
+        Uri.parse('$baseUrl/medecin/dossier-medicale/${widget.userId}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -469,9 +464,7 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse(
-          '$baseUrl/medecin/ordonnances/$ordonnanceId/pdf',
-        ),
+        Uri.parse('$baseUrl/medecin/ordonnances/$ordonnanceId/pdf'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -648,431 +641,416 @@ class _DoctorMedicalRecordScreenState extends State<DoctorMedicalRecordScreen> {
     final titleFontSize = isTablet ? 20.0 : 18.0;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF3F51B5),
-        title: Text(
-          'Medical Record',
-          style: GoogleFonts.poppins(
-            fontSize: titleFontSize + (isLargeScreen ? 2 : 0),
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            backgroundColor: Colors.orange,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () =>
-              Navigator.pushReplacementNamed(context, '/doctor-patients'),
+        centerTitle: true,
+        title: Text(
+          'Dossier médical',
+          style: GoogleFonts.poppins(
+            color: Color(0xFF565ACF),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4DB6AC)),
-                ),
-              )
-            : LayoutBuilder(
-                builder: (context, constraints) {
-                  print(
-                    'Building UI, dossier is: ${_dossier != null ? "set" : "null"}',
-                  ); // Debug UI render
-                  return SingleChildScrollView(
-                    padding: EdgeInsets.all(
-                      isTablet ? 32.0 : constraints.maxWidth * 0.05,
+
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Backgroundelapps.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Color(0xFF4DB6AC),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (_dossier == null) ...[
-                          Center(
-                            child: Text(
-                              'No medical record found for this patient.',
-                              style: GoogleFonts.poppins(
-                                fontSize: baseFontSize,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: constraints.maxHeight * 0.02),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () =>
-                                  setState(() => _isCreateModalOpen = true),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF3F51B5),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: constraints.maxWidth * 0.06,
-                                  vertical: constraints.maxHeight * 0.015,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
+                  ),
+                )
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    print(
+                      'Building UI, dossier is: ${_dossier != null ? "set" : "null"}',
+                    ); // Debug UI render
+
+                    return SingleChildScrollView(
+                      padding: EdgeInsets.all(
+                        isTablet ? 32.0 : constraints.maxWidth * 0.05,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_dossier == null) ...[
+                            Center(
                               child: Text(
-                                'Create Dossier',
+                                'No medical record found for this patient.',
                                 style: GoogleFonts.poppins(
-                                  fontSize: baseFontSize - 2,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  fontSize: baseFontSize,
+                                  color: Colors.black54,
                                 ),
                               ),
                             ),
-                          ),
-                        ] else ...[
-                          Card(
-                            elevation: 4,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(
-                                color: Color(0xFF3F51B5),
-                                width: 1,
+                            SizedBox(height: constraints.maxHeight * 0.02),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () =>
+                                    setState(() => _isCreateModalOpen = true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF3F51B5),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: constraints.maxWidth * 0.06,
+                                    vertical: constraints.maxHeight * 0.015,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Create Dossier',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: baseFontSize - 2,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                constraints.maxWidth * 0.04,
+                          ] else ...[
+                            Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: const BorderSide(
+                                  color: Color(0xFF3F51B5),
+                                  width: 1,
+                                ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Medical Record Details',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: titleFontSize,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF3F51B5),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: constraints.maxHeight * 0.015,
-                                  ),
-                                  Text(
-                                    'Diagnostic: ${_dossier!['diagnostic'] ?? 'N/A'}',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: baseFontSize,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Blood Group: ${_dossier!['groupe_sanguin'] ?? 'N/A'}',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: baseFontSize,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Weight: ${_dossier!['poids'] != null ? '${_dossier!['poids']} kg' : 'N/A'}',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: baseFontSize,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Height: ${_dossier!['taille'] != null ? '${_dossier!['taille']} cm' : 'N/A'}',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: baseFontSize,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Patient: ${_dossier!['user']?['name'] ?? 'N/A'}',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: baseFontSize,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: constraints.maxHeight * 0.02,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: ElevatedButton(
-                                      onPressed: () => setState(
-                                        () => _isEditModalOpen = true,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  constraints.maxWidth * 0.04,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Medical Record Details',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: titleFontSize,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF3F51B5),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(
-                                          0xFF3F51B5,
+                                    ),
+                                    SizedBox(
+                                      height: constraints.maxHeight * 0.015,
+                                    ),
+                                    Text(
+                                      'Diagnostic: ${_dossier!['diagnostic'] ?? 'N/A'}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: baseFontSize,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Blood Group: ${_dossier!['groupe_sanguin'] ?? 'N/A'}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: baseFontSize,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Weight: ${_dossier!['poids'] != null ? '${_dossier!['poids']} kg' : 'N/A'}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: baseFontSize,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Height: ${_dossier!['taille'] != null ? '${_dossier!['taille']} cm' : 'N/A'}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: baseFontSize,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Patient: ${_dossier!['user']?['name'] ?? 'N/A'}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: baseFontSize,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: constraints.maxHeight * 0.02,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: ElevatedButton(
+                                        onPressed: () => setState(
+                                          () => _isEditModalOpen = true,
                                         ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(
+                                            0xFF3F51B5,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Edit Dossier',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                            fontSize: baseFontSize - 2,
                                           ),
                                         ),
                                       ),
-                                      child: Text(
-                                        'Edit Dossier',
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.white,
-                                          fontSize: baseFontSize - 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: constraints.maxHeight * 0.03),
+                            Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: const BorderSide(
+                                  color: Color(0xFF3F51B5),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(
+                                      constraints.maxWidth * 0.04,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Prescriptions',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: titleFontSize,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color(0xFF3F51B5),
+                                          ),
                                         ),
-                                      ),
+                                        if (_dossier != null &&
+                                            _dossier!['id'] !=
+                                                null) // Stricter condition
+                                          ElevatedButton(
+                                            onPressed:
+                                                _openPrescriptionModal, // Use new method
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color(
+                                                0xFF3F51B5,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'Add Prescription',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.white,
+                                                fontSize: baseFontSize - 2,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
+                                  if (_dossier == null ||
+                                      _dossier!['id'] == null)
+                                    Padding(
+                                      padding: EdgeInsets.all(
+                                        constraints.maxWidth * 0.04,
+                                      ),
+                                      child: Text(
+                                        'Create a medical record to add prescriptions.',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: baseFontSize,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    )
+                                  else if (_prescriptions.isEmpty)
+                                    Padding(
+                                      padding: EdgeInsets.all(
+                                        constraints.maxWidth * 0.04,
+                                      ),
+                                      child: Text(
+                                        'No prescriptions found.',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: baseFontSize,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: _prescriptions.length,
+                                      itemBuilder: (context, index) {
+                                        final prescription =
+                                            _prescriptions[index];
+                                        final bool isExpanded =
+                                            _expandedPrescriptions[prescription['id']] ??
+                                            false;
+                                        return ExpansionTile(
+                                          title: Text(
+                                            'Prescription ID: ${prescription['id']}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: baseFontSize,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            'Date: ${DateTime.parse(prescription['date']).toLocal().toString().split(' ')[0]}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: baseFontSize - 2,
+                                              color: Colors.black54,
+                                            ),
+                                          ),
+                                          trailing: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.download,
+                                                  color: Color(0xFF4DB6AC),
+                                                ),
+                                                onPressed: () =>
+                                                    _downloadPrescription(
+                                                      prescription['id'],
+                                                    ),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                                onPressed: () =>
+                                                    _deletePrescription(
+                                                      prescription['id'],
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(
+                                                constraints.maxWidth * 0.04,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children:
+                                                    (prescription['medicaments']
+                                                                as List<
+                                                                  dynamic
+                                                                >? ??
+                                                            [])
+                                                        .map(
+                                                          (med) => Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                'Medicament: ${med['medicament'] ?? 'N/A'}',
+                                                                style: GoogleFonts.poppins(
+                                                                  fontSize:
+                                                                      baseFontSize -
+                                                                      2,
+                                                                  color: Colors
+                                                                      .black87,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Dosage: ${med['dosage'] ?? 'N/A'}',
+                                                                style: GoogleFonts.poppins(
+                                                                  fontSize:
+                                                                      baseFontSize -
+                                                                      2,
+                                                                  color: Colors
+                                                                      .black87,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Frequency: ${med['frequence'] ?? 'N/A'}',
+                                                                style: GoogleFonts.poppins(
+                                                                  fontSize:
+                                                                      baseFontSize -
+                                                                      2,
+                                                                  color: Colors
+                                                                      .black87,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Duration: ${med['duree'] ?? 'N/A'}',
+                                                                style: GoogleFonts.poppins(
+                                                                  fontSize:
+                                                                      baseFontSize -
+                                                                      2,
+                                                                  color: Colors
+                                                                      .black87,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height:
+                                                                    constraints
+                                                                        .maxHeight *
+                                                                    0.01,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                              ),
+                                            ),
+                                          ],
+                                          onExpansionChanged: (expanded) {
+                                            setState(() {
+                                              _expandedPrescriptions[prescription['id']] =
+                                                  expanded;
+                                            });
+                                          },
+                                        );
+                                      },
+                                    ),
                                 ],
                               ),
                             ),
-                          ),
-                          SizedBox(height: constraints.maxHeight * 0.03),
-                          Card(
-                            elevation: 4,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(
-                                color: Color(0xFF3F51B5),
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(
-                                    constraints.maxWidth * 0.04,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Prescriptions',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: titleFontSize,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3F51B5),
-                                        ),
-                                      ),
-                                      if (_dossier != null &&
-                                          _dossier!['id'] !=
-                                              null) // Stricter condition
-                                        ElevatedButton(
-                                          onPressed:
-                                              _openPrescriptionModal, // Use new method
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(
-                                              0xFF3F51B5,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            'Add Prescription',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.white,
-                                              fontSize: baseFontSize - 2,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                if (_dossier == null || _dossier!['id'] == null)
-                                  Padding(
-                                    padding: EdgeInsets.all(
-                                      constraints.maxWidth * 0.04,
-                                    ),
-                                    child: Text(
-                                      'Create a medical record to add prescriptions.',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: baseFontSize,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  )
-                                else if (_prescriptions.isEmpty)
-                                  Padding(
-                                    padding: EdgeInsets.all(
-                                      constraints.maxWidth * 0.04,
-                                    ),
-                                    child: Text(
-                                      'No prescriptions found.',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: baseFontSize,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  )
-                                else
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: _prescriptions.length,
-                                    itemBuilder: (context, index) {
-                                      final prescription =
-                                          _prescriptions[index];
-                                      final bool isExpanded =
-                                          _expandedPrescriptions[prescription['id']] ??
-                                          false;
-                                      return ExpansionTile(
-                                        title: Text(
-                                          'Prescription ID: ${prescription['id']}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: baseFontSize,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          'Date: ${DateTime.parse(prescription['date']).toLocal().toString().split(' ')[0]}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: baseFontSize - 2,
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                        trailing: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.download,
-                                                color: Color(0xFF4DB6AC),
-                                              ),
-                                              onPressed: () =>
-                                                  _downloadPrescription(
-                                                    prescription['id'],
-                                                  ),
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
-                                              ),
-                                              onPressed: () =>
-                                                  _deletePrescription(
-                                                    prescription['id'],
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(
-                                              constraints.maxWidth * 0.04,
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children:
-                                                  (prescription['medicaments']
-                                                              as List<
-                                                                dynamic
-                                                              >? ??
-                                                          [])
-                                                      .map(
-                                                        (med) => Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              'Medicament: ${med['medicament'] ?? 'N/A'}',
-                                                              style: GoogleFonts.poppins(
-                                                                fontSize:
-                                                                    baseFontSize -
-                                                                    2,
-                                                                color: Colors
-                                                                    .black87,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              'Dosage: ${med['dosage'] ?? 'N/A'}',
-                                                              style: GoogleFonts.poppins(
-                                                                fontSize:
-                                                                    baseFontSize -
-                                                                    2,
-                                                                color: Colors
-                                                                    .black87,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              'Frequency: ${med['frequence'] ?? 'N/A'}',
-                                                              style: GoogleFonts.poppins(
-                                                                fontSize:
-                                                                    baseFontSize -
-                                                                    2,
-                                                                color: Colors
-                                                                    .black87,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              'Duration: ${med['duree'] ?? 'N/A'}',
-                                                              style: GoogleFonts.poppins(
-                                                                fontSize:
-                                                                    baseFontSize -
-                                                                    2,
-                                                                color: Colors
-                                                                    .black87,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height:
-                                                                  constraints
-                                                                      .maxHeight *
-                                                                  0.01,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                            ),
-                                          ),
-                                        ],
-                                        onExpansionChanged: (expanded) {
-                                          setState(() {
-                                            _expandedPrescriptions[prescription['id']] =
-                                                expanded;
-                                          });
-                                        },
-                                      );
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
+                          ],
                         ],
-                      ],
-                    ),
-                  );
-                },
-              ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF3F51B5),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavItemTapped,
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          selectedLabelStyle: GoogleFonts.poppins(fontSize: isTablet ? 14 : 12),
-          unselectedLabelStyle: GoogleFonts.poppins(
-            fontSize: isTablet ? 14 : 12,
-          ),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: 'Patients',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Appointments',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
+                      ),
+                    );
+                  },
+                ),
         ),
       ),
+
       floatingActionButton: _isCreateModalOpen
           ? _buildModal(
               title: 'Create Medical Record',
