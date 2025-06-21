@@ -21,7 +21,11 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
   String? _errorMessage;
   String? _doctorName;
 
+<<<<<<< HEAD
   final String baseUrl = 'http://192.168.43.161:8000/api';
+=======
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
 
   @override
   void initState() {

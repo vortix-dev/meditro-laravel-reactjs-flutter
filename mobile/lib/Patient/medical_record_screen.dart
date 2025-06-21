@@ -19,7 +19,12 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
   List<dynamic> _medicalRecords = [];
   bool _isLoading = false;
   int _selectedIndex = 2;
+<<<<<<< HEAD
   final String baseUrl = 'http://192.168.43.161:8000/api';
+=======
+
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
 
   @override
   void initState() {
@@ -33,6 +38,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
 
     try {
       final response = await http.get(
+<<<<<<< HEAD
         Uri.parse('$baseUrl/user/dossier-medical'),
         headers: {
           'Content-Type': 'application/json',
@@ -93,10 +99,70 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
         if (result.type != ResultType.done) {
           _showError('Erreur lors de l\'ouverture du PDF : ${result.message}');
         }
+=======
+        Uri.parse('$baseUrl/medical-records'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final List data = json.decode(response.body);
+        setState(() {
+          _medicalRecords = data;
+          _isLoading = false;
+        });
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
       } else {
         _handleError(response);
       }
     } catch (e) {
+<<<<<<< HEAD
+=======
+      _showError('Erreur lors du chargement : $e');
+    }
+  }
+
+  void _handleError(http.Response response) {
+    String errorMessage = 'Échec du chargement des dossiers';
+    try {
+      final errorData = json.decode(utf8.decode(response.bodyBytes));
+      errorMessage = errorData['message'] ?? errorMessage;
+    } catch (_) {}
+    _showError(errorMessage);
+  }
+
+  void _showError(String message) {
+    setState(() => _isLoading = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: GoogleFonts.poppins(color: Color(0xFF3F51B5)),
+        ),
+        backgroundColor: const Color(0xFFFF7043),
+      ),
+    );
+  }
+
+  Future<void> _downloadPrescription(int id) async {
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/download-prescription/$id'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final bytes = response.bodyBytes;
+        final dir = await getApplicationDocumentsDirectory();
+        final file = File('${dir.path}/prescription_$id.pdf');
+        await file.writeAsBytes(bytes);
+        OpenFile.open(file.path);
+      } else {
+        _handleError(response);
+      }
+    } catch (e) {
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
       _showError('Erreur de téléchargement : $e');
     }
   }
@@ -213,10 +279,14 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                 ? Center(
                     child: Text(
                       'Aucun dossier médical trouvé',
+<<<<<<< HEAD
                       style: GoogleFonts.poppins(
                         fontSize: isTablet ? 18 : 16,
                         color: Color(0xFF3F51B5),
                       ),
+=======
+                      style: GoogleFonts.poppins(color: Color(0xFF3F51B5)),
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                     ),
                   )
                 : ListView.builder(
@@ -244,7 +314,10 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                 Text(
                                   'Diagnostic : ${record['diagnostic'] ?? 'N/A'}',
                                   style: GoogleFonts.poppins(
+<<<<<<< HEAD
                                     fontSize: isTablet ? 18 : 16,
+=======
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                     fontWeight: FontWeight.bold,
                                     color: const Color(0xFF3F51B5),
                                   ),
@@ -253,23 +326,36 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                 Text(
                                   'Groupe sanguin : ${record['groupe_sanguin'] ?? 'N/A'}',
                                   style: GoogleFonts.poppins(
+<<<<<<< HEAD
                                     fontSize: isTablet ? 16 : 14,
+=======
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                     color: const Color(0xFF3F51B5),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
+<<<<<<< HEAD
                                   'Poids : ${record['poids']?.toString() ?? 'N/A'} kg',
                                   style: GoogleFonts.poppins(
                                     fontSize: isTablet ? 16 : 14,
+=======
+                                  'Poids : ${record['poids'] ?? 'N/A'} kg',
+                                  style: GoogleFonts.poppins(
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                     color: const Color(0xFF3F51B5),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
+<<<<<<< HEAD
                                   'Taille : ${record['taille']?.toString() ?? 'N/A'} cm',
                                   style: GoogleFonts.poppins(
                                     fontSize: isTablet ? 16 : 14,
+=======
+                                  'Taille : ${record['taille'] ?? 'N/A'} cm',
+                                  style: GoogleFonts.poppins(
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                     color: const Color(0xFF3F51B5),
                                   ),
                                 ),
@@ -283,7 +369,10 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       Text(
                                         'Ordonnances :',
                                         style: GoogleFonts.poppins(
+<<<<<<< HEAD
                                           fontSize: isTablet ? 16 : 14,
+=======
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                           fontWeight: FontWeight.w600,
                                           color: const Color(0xFF3F51B5),
                                         ),
@@ -300,9 +389,14 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
+<<<<<<< HEAD
                                                 'Prescription : ${ord['date'] ?? 'N/A'}',
                                                 style: GoogleFonts.poppins(
                                                   fontSize: isTablet ? 16 : 14,
+=======
+                                                'Prescription : ${ord['date']}',
+                                                style: GoogleFonts.poppins(
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                                   color: const Color(
                                                     0xFF3F51B5,
                                                   ).withOpacity(0.7),
@@ -315,10 +409,15 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                                 ),
                                                 onPressed: () =>
                                                     _downloadPrescription(
+<<<<<<< HEAD
                                                       ord['id'] ?? 0,
                                                     ),
                                                 tooltip:
                                                     'Télécharger l\'ordonnance',
+=======
+                                                      ord['id'],
+                                                    ),
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
                                               ),
                                             ],
                                           ),
@@ -335,6 +434,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                   ),
           ),
         ],
+<<<<<<< HEAD
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
@@ -361,6 +461,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
+=======
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
       ),
     );
   }
