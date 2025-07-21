@@ -4,7 +4,6 @@ import ServiceCard from '../components/ServiceCard';
 import DoctorCard from '../components/DoctorCard';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import './Home.css'; // Import the CSS file
 
 function Home() {
   const [services, setServices] = useState([]);

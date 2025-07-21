@@ -15,12 +15,7 @@ class AuthProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-<<<<<<< HEAD
   final String baseUrl ='http://192.168.19.123:8000/api'; // Replace with your API URL
-=======
-  final String baseUrl =
-      'http://192.168.43.161:8000/api'; // Replace with your API URL
->>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
 
   Future<bool> register({
     required String name,
@@ -117,4 +112,3 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
