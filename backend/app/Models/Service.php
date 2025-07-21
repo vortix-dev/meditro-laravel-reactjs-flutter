@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Service extends Model
 {
-    protected $fillable = ['name', 'img'];
+    protected $fillable = ['name'];
 
     public function getImgAttribute($value)
     {

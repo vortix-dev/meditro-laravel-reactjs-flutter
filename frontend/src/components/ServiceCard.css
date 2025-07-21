@@ -18,10 +18,12 @@
 
 .card-content {
   padding: 16px; /* Equivalent to p-4 */
+    align: center; /* Equivalent to text-gray-800 */
+
 }
 
 .card-title {
   font-size: 1.25rem; /* Equivalent to text-xl */
   font-weight: 600; /* Equivalent to font-semibold */
-  color: #1f2937; /* Equivalent to text-gray-800 */
+  color: #1f2937;
 }

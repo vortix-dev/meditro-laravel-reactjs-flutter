@@ -4,13 +4,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../Auth/auth_provider.dart';
-import 'doctor_dashboard.dart';
 
 class DoctorAppointmentsScreen extends StatefulWidget {
   const DoctorAppointmentsScreen({super.key});
 
   @override
-  _DoctorAppointmentsScreenState createState() =>
+  State<DoctorAppointmentsScreen> createState() =>
       _DoctorAppointmentsScreenState();
 }
 
@@ -19,9 +18,9 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
   List<dynamic> _filteredAppointments = [];
   bool _isLoading = false;
   String? _errorMessage;
-  int _selectedIndex = 1;
-  String _selectedFilter = 'all'; // Filter for appointments
-  final String baseUrl = 'https://api-meditro.x10.mx/api';
+  String _selectedFilter = 'all';
+  final String baseUrl ='http://192.168.19.123:8000/api'; // Replace with your API URL
+
 
   @override
   void initState() {
@@ -37,12 +36,6 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
-    final userId = authProvider.userId;
-
-    if (token == null || userId == null) {
-      _handleError('Please log in again');
-      return;
-    }
 
     try {
       final response = await http.get(
@@ -61,13 +54,10 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
           _isLoading = false;
         });
       } else {
-        _handleError(
-          json.decode(response.body)['message'] ??
-              'Failed to fetch appointments',
-        );
+        _handleError('Erreur lors du chargement');
       }
     } catch (e) {
-      _handleError('An error occurred. Please try again.');
+      _handleError('Erreur de connexion');
     }
   }
 
@@ -115,282 +105,259 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
         final data = json.decode(response.body);
         setState(() {
           _appointments = _appointments.map((appt) {
-            if (appt['id'] == id) {
-              return {...appt, 'status': status};
-            }
+            if (appt['id'] == id) return {...appt, 'status': status};
             return appt;
           }).toList();
           _applyFilter();
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(data['message'] ?? 'Status updated'),
+            content: Text(data['message']),
             backgroundColor: Colors.green,
           ),
         );
       } else {
-        _handleError(
-          json.decode(response.body)['message'] ?? 'Failed to update status',
-        );
+        _handleError('Échec de la mise à jour');
       }
     } catch (e) {
-      _handleError('Failed to update status');
+      _handleError('Erreur serveur');
     }
   }
 
   void _onNavItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    if (index == 0) {
-      Navigator.pushNamed(context, '/doctor-patients');
-    } else if (index == 2) {
-      Navigator.pushNamed(context, '/doctor-profile');
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/doctor');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/doctor-patients');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/doctor-appointments');
+        break;
+      case 3:
+        Navigator.pushReplacementNamed(context, '/doctor-profile');
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
+    final isTablet = MediaQuery.of(context).size.width > 600;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF3F51B5),
-        title: Text(
-          'Manage Appointments',
-          style: GoogleFonts.poppins(
-            fontSize: isTablet ? 22 : 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const DoctorDashboard()),
-            );
-          },
-        ),
+        automaticallyImplyLeading: false, // Supprime le bouton retour
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Image.asset('assets/logo.png', height: 50),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
+            icon: const Icon(
+              Icons.refresh,
+              color: Color.fromARGB(255, 255, 0, 0),
+            ),
             onPressed: _fetchAppointments,
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(isTablet ? 24.0 : 16.0),
-              child: DropdownButton<String>(
-                value: _selectedFilter,
-                isExpanded: true,
-                hint: Text('Filter Appointments', style: GoogleFonts.poppins()),
-                items: const [
-                  DropdownMenuItem(value: 'all', child: Text('All')),
-                  DropdownMenuItem(
-                    value: 'confirmed',
-                    child: Text('Confirmed'),
-                  ),
-                  DropdownMenuItem(value: 'done', child: Text('Done')),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedFilter = value;
-                      _applyFilter();
-                    });
-                  }
-                },
-              ),
+      body: Stack(
+        children: [
+          // ✅ Image de fond SANS transparence
+          Positioned.fill(
+            child: Image.asset(
+              'assets/Backgroundelapps.jpg',
+              fit: BoxFit.cover,
             ),
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF4DB6AC),
-                        ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(isTablet ? 24 : 16),
+                  child: DropdownButton<String>(
+                    value: _selectedFilter,
+                    isExpanded: true,
+                    items: const [
+                      DropdownMenuItem(value: 'all', child: Text('Tous')),
+                      DropdownMenuItem(
+                        value: 'confirmed',
+                        child: Text('Confirmés'),
                       ),
-                    )
-                  : _errorMessage != null
-                  ? Center(
-                      child: Text(
-                        _errorMessage!,
-                        style: GoogleFonts.poppins(
-                          color: const Color(0xFFFF7043),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    )
-                  : _filteredAppointments.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No appointments found.',
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.all(isTablet ? 24.0 : 16.0),
-                      itemCount: _filteredAppointments.length,
-                      itemBuilder: (context, index) {
-                        final appt = _filteredAppointments[index];
-                        return Card(
-                          elevation: 4,
-                          margin: const EdgeInsets.only(bottom: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: appt['status'] == 'confirmed'
-                                  ? Colors.blueAccent
-                                  : const Color(0xFF3F51B5),
-                              width: 2,
+                      DropdownMenuItem(value: 'done', child: Text('Terminés')),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedFilter = value;
+                          _applyFilter();
+                        });
+                      }
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _errorMessage != null
+                      ? Center(
+                          child: Text(
+                            _errorMessage!,
+                            style: GoogleFonts.poppins(
+                              color: Colors.red,
+                              fontSize: 16,
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                        )
+                      : _filteredAppointments.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Aucun rendez-vous.',
+                            style: GoogleFonts.poppins(fontSize: 16),
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: _filteredAppointments.length,
+                          itemBuilder: (context, index) {
+                            final appt = _filteredAppointments[index];
+                            return Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(
+                                  color: Colors.orange.shade200,
+                                  width: 1.5,
+                                ),
+                              ),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'ID: ${appt['id']}',
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        Text(
+                                          appt['status']
+                                              .toString()
+                                              .toUpperCase(),
+                                          style: GoogleFonts.poppins(
+                                            color: appt['status'] == 'done'
+                                                ? Colors.green
+                                                : appt['status'] == 'confirmed'
+                                                ? Colors.blue
+                                                : Colors.orange,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
                                     Text(
-                                      'ID: ${appt['id']}',
+                                      'Nom: ${appt['user']['name']}',
+                                      style: GoogleFonts.poppins(fontSize: 16),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Téléphone: ${appt['user']['phone']}',
                                       style: GoogleFonts.poppins(
-                                        fontSize: isTablet ? 16 : 14,
+                                        fontSize: 16,
+                                        color: Colors.orange.shade800,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
+                                    const SizedBox(height: 4),
                                     Text(
-                                      appt['status'].toString().toUpperCase(),
+                                      'Date: ${appt['date']}',
                                       style: GoogleFonts.poppins(
-                                        fontSize: isTablet ? 14 : 12,
-                                        color: appt['status'] == 'done'
-                                            ? Colors.green
-                                            : appt['status'] == 'cancelled'
-                                            ? Colors.red
-                                            : appt['status'] == 'confirmed'
-                                            ? Colors.blueAccent
-                                            : Colors.orange,
-                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                        color: Colors.blue.shade700,
                                       ),
+                                    ),
+                                    Text(
+                                      'Heure: ${appt['heure']}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 15,
+                                        color: Colors.blue.shade700,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    DropdownButton<String>(
+                                      value: appt['status'],
+                                      isExpanded: true,
+                                      items: [
+                                        if (appt['status'] == 'confirmed')
+                                          const DropdownMenuItem(
+                                            value: 'confirmed',
+                                            child: Text('Confirmé'),
+                                          ),
+                                        const DropdownMenuItem(
+                                          value: 'done',
+                                          child: Text('Terminé'),
+                                        ),
+                                        const DropdownMenuItem(
+                                          value: 'cancelled',
+                                          child: Text('Annulé'),
+                                        ),
+                                      ],
+                                      onChanged:
+                                          [
+                                            'done',
+                                            'cancelled',
+                                          ].contains(appt['status'])
+                                          ? null
+                                          : (value) {
+                                              if (value != null &&
+                                                  value != appt['status']) {
+                                                _updateStatus(
+                                                  appt['id'],
+                                                  value,
+                                                );
+                                              }
+                                            },
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Patient: ${appt['user']?['name'] ?? 'N/A'}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 16 : 14,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Date: ${DateTime.parse(appt['date']).toLocal().toString().split(' ')[0]}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 14 : 12,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Time: ${appt['heure'] ?? 'N/A'}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 14 : 12,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                DropdownButton<String>(
-                                  value: appt['status'],
-                                  isExpanded: true,
-                                  hint: Text(
-                                    'Select Status',
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  items: [
-                                    if (appt['status'] == 'confirmed')
-                                      const DropdownMenuItem(
-                                        value: 'confirmed',
-                                        child: Text('Confirmed'),
-                                      ),
-                                    const DropdownMenuItem(
-                                      value: 'done',
-                                      child: Text('Done'),
-                                    ),
-                                    const DropdownMenuItem(
-                                      value: 'cancelled',
-                                      child: Text('Cancelled'),
-                                    ),
-                                  ],
-                                  onChanged:
-                                      [
-                                        'done',
-                                        'cancelled',
-                                      ].contains(appt['status'])
-                                      ? null
-                                      : (value) {
-                                          if (value != null &&
-                                              value.isNotEmpty &&
-                                              value != 'confirmed') {
-                                            _updateStatus(appt['id'], value);
-                                          }
-                                        },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF3F51B5),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavItemTapped,
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          selectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          unselectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: 'Patients',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Appointments',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 2, // "Rendez-vous" actif
+        onTap: _onNavItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF565ACF),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedIconTheme: const IconThemeData(size: 32),
+        unselectedIconTheme: const IconThemeData(size: 28),
+        selectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Patients'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Rendez-vous',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }

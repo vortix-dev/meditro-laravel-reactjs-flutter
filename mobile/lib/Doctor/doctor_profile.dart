@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../Auth/auth_provider.dart';
-import 'doctor_dashboard.dart';
 
 class DoctorProfileScreen extends StatefulWidget {
   const DoctorProfileScreen({super.key});
@@ -21,36 +20,23 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   final _passwordController = TextEditingController();
   final _passwordConfirmController = TextEditingController();
   bool _isLoading = false;
-  int _selectedIndex = 2; // Set to 2 since this is the Profile screen
-   final String baseUrl =
-      'https://api-meditro.x10.mx/api';
+  int _selectedIndex = 3;
+
+  final String baseUrl ='http://192.168.19.123:8000/api'; // Replace with your API URL
+
   @override
   void initState() {
     super.initState();
     _fetchProfile();
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _passwordConfirmController.dispose();
-    super.dispose();
-  }
-
   Future<void> _fetchProfile() async {
-    setState(() {
-      _isLoading = true;
-    });
-
+    setState(() => _isLoading = true);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
 
     if (token == null) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please log in again'),
@@ -63,12 +49,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/medecin/profile'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
-
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'];
         setState(() {
@@ -78,28 +60,10 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
           _isLoading = false;
         });
       } else {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              json.decode(response.body)['message'] ?? 'Failed to load profile',
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+        setState(() => _isLoading = false);
       }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to load profile'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    } catch (_) {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -111,10 +75,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     final userId = authProvider.userId;
 
     final payload = {};
-    if (_nameController.text != _profile['name'])
+    if (_nameController.text != _profile['name']) {
       payload['name'] = _nameController.text;
-    if (_emailController.text != _profile['email'])
+    }
+    if (_emailController.text != _profile['email']) {
       payload['email'] = _emailController.text;
+    }
     if (_passwordController.text.isNotEmpty) {
       payload['password'] = _passwordController.text;
       payload['password_confirmation'] = _passwordConfirmController.text;
@@ -134,8 +100,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
       final response = await http.put(
         Uri.parse('$baseUrl/medecin/profile-update/$userId'),
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: json.encode(payload),
       );
@@ -148,29 +114,23 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
           _passwordConfirmController.clear();
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              json.decode(response.body)['message'] ??
-                  'Profile updated successfully',
-            ),
+          const SnackBar(
+            content: Text('Profile updated'),
             backgroundColor: Colors.green,
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              json.decode(response.body)['message'] ??
-                  'Failed to update profile',
-            ),
+          const SnackBar(
+            content: Text('Update failed'),
             backgroundColor: Colors.red,
           ),
         );
       }
-    } catch (e) {
+    } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to update profile'),
+          content: Text('Update error'),
           backgroundColor: Colors.red,
         ),
       );
@@ -178,282 +138,232 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   }
 
   void _onNavItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    if (index == 0) {
-      Navigator.pushNamed(context, '/doctor-patients');
-    } else if (index == 1) {
-      Navigator.pushNamed(context, '/doctor-appointments');
-    } else if (index == 2) {
-      // Already on profile screen, no action needed
-    }
+    setState(() => _selectedIndex = index);
+    if (index == 0) Navigator.pushNamed(context, '/doctor');
+    if (index == 1) Navigator.pushNamed(context, '/doctor-patients');
+    if (index == 2) Navigator.pushNamed(context, '/doctor-appointments');
+  }
+
+  void _showLogoutConfirmation() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Confirmation'),
+        content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+        actions: [
+          TextButton(
+            child: const Text('Annuler'),
+            onPressed: () => Navigator.of(ctx).pop(),
+          ),
+          TextButton(
+            child: const Text(
+              'Se déconnecter',
+              style: TextStyle(color: Colors.red),
+            ),
+            onPressed: () {
+              Provider.of<AuthProvider>(context, listen: false).logout();
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil('/login', (route) => false);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
+    final isTablet = MediaQuery.of(context).size.width > 600;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF3F51B5),
-        title: Text(
-          'Doctor Profile',
-          style: GoogleFonts.poppins(
-            fontSize: isTablet ? 22 : 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false, // plus de bouton retour
+        title: Image.asset('assets/logo.png', height: 50),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Backgroundelapps.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const DoctorDashboard()),
-            );
-          },
-        ),
-      ),
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4DB6AC)),
-                ),
-              )
-            : SingleChildScrollView(
-                padding: EdgeInsets.all(isTablet ? 32.0 : 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Current Profile Card
-                    Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(
-                          color: Color(0xFF3F51B5),
-                          width: 1,
+        child: SafeArea(
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  padding: EdgeInsets.all(isTablet ? 32 : 20),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Text(
+                        'Mon Profil',
+                        style: GoogleFonts.poppins(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF565ACF),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Current Profile',
-                              style: GoogleFonts.poppins(
-                                fontSize: isTablet ? 20 : 18,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF3F51B5),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.person,
-                                  color: Color(0xFF4DB6AC),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Name: ${_profile['name']}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 16 : 14,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.email,
-                                  color: Color(0xFF4DB6AC),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Username: ${_profile['email']}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: isTablet ? 16 : 14,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                      const SizedBox(height: 16),
+                      Card(
+                        color: Colors.white.withOpacity(0.95),
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: const BorderSide(color: Colors.orange),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    // Update Profile Form
-                    Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(
-                          color: Color(0xFF3F51B5),
-                          width: 1,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Form(
-                          key: _formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Update Profile',
-                                style: GoogleFonts.poppins(
-                                  fontSize: isTablet ? 20 : 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF3F51B5),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.person,
+                                  color: Colors.orange,
+                                ),
+                                title: Text(
+                                  'Nom : ${_profile['name']}',
+                                  style: GoogleFonts.poppins(fontSize: 16),
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              TextFormField(
-                                controller: _nameController,
-                                decoration: InputDecoration(
-                                  labelText: 'Name',
-                                  labelStyle: GoogleFonts.poppins(),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  prefixIcon: const Icon(
-                                    Icons.person,
-                                    color: Color(0xFF4DB6AC),
-                                  ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.email,
+                                  color: Colors.orange,
                                 ),
-                                validator: (value) => value!.isEmpty
-                                    ? 'Please enter your name'
-                                    : null,
-                              ),
-                              const SizedBox(height: 16),
-                              TextFormField(
-                                controller: _emailController,
-                                decoration: InputDecoration(
-                                  labelText: 'Username',
-                                  labelStyle: GoogleFonts.poppins(),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  prefixIcon: const Icon(
-                                    Icons.email,
-                                    color: Color(0xFF4DB6AC),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextFormField(
-                                controller: _passwordController,
-                                decoration: InputDecoration(
-                                  labelText: 'Password (optional)',
-                                  labelStyle: GoogleFonts.poppins(),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  prefixIcon: const Icon(
-                                    Icons.lock,
-                                    color: Color(0xFF4DB6AC),
-                                  ),
-                                ),
-                                obscureText: true,
-                              ),
-                              const SizedBox(height: 16),
-                              TextFormField(
-                                controller: _passwordConfirmController,
-                                decoration: InputDecoration(
-                                  labelText: 'Confirm Password',
-                                  labelStyle: GoogleFonts.poppins(),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  prefixIcon: const Icon(
-                                    Icons.lock,
-                                    color: Color(0xFF4DB6AC),
-                                  ),
-                                ),
-                                obscureText: true,
-                                validator: (value) {
-                                  if (_passwordController.text.isNotEmpty &&
-                                      value != _passwordController.text) {
-                                    return 'Passwords do not match';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: _updateProfile,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF3F51B5),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Update Profile',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: isTablet ? 16 : 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                title: Text(
+                                  'Email : ${_profile['email']}',
+                                  style: GoogleFonts.poppins(fontSize: 16),
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            _buildField(_nameController, 'Nom', Icons.person),
+                            const SizedBox(height: 12),
+                            _buildField(_emailController, 'Email', Icons.email),
+                            const SizedBox(height: 12),
+                            _buildField(
+                              _passwordController,
+                              'Mot de passe',
+                              Icons.lock,
+                              obscure: true,
+                            ),
+                            const SizedBox(height: 12),
+                            _buildField(
+                              _passwordConfirmController,
+                              'Confirmer mot de passe',
+                              Icons.lock,
+                              obscure: true,
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: _updateProfile,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 30,
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                'Modifier Profil',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      ElevatedButton.icon(
+                        onPressed: _showLogoutConfirmation,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(Icons.logout, color: Colors.white),
+                        label: Text(
+                          'Se déconnecter',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF3F51B5),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavItemTapped,
-          backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white70,
-          selectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          unselectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: 'Patients',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Appointments',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onNavItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF565ACF),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedIconTheme: const IconThemeData(size: 32),
+        unselectedIconTheme: const IconThemeData(size: 28),
+        selectedLabelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Patients'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Rendez-vous',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildField(
+    TextEditingController controller,
+    String label,
+    IconData icon, {
+    bool obscure = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscure,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.blue),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.9),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      validator: (value) =>
+          (label.contains('mot') && controller.text != _passwordController.text)
+          ? 'Les mots de passe ne correspondent pas'
+          : (value == null || value.isEmpty)
+          ? 'Champ requis'
+          : null,
     );
   }
 }

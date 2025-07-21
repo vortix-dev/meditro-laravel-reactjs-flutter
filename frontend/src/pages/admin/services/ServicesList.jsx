@@ -58,7 +58,6 @@ function ServicesList() {
             <table className="services-table">
               <thead>
                 <tr>
-                  <th>Image</th>
                   <th>Name</th>
                   <th>Actions</th>
                 </tr>
@@ -66,16 +65,6 @@ function ServicesList() {
               <tbody>
                 {services.map((service) => (
                   <tr key={service.id}>
-                    <td>
-                      {service.img && (
-                        <img
-                          src={service.img}
-                          width={60}
-                          alt={service.name}
-                          className="table-img"
-                        />
-                      )}
-                    </td>
                     <td>{service.name}</td>
                     <td>
                       <Link to={`/admin/services/edit/${service.id}`} className="link edit-link">

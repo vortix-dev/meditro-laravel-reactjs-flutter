@@ -13,7 +13,6 @@ function CreateService() {
     e.preventDefault();
     const data = new FormData();
     data.append('name', formData.name);
-    if (formData.img) data.append('img', formData.img);
 
     try {
       await axios.post('http://localhost:8000/api/admin/services', data, {
@@ -42,16 +41,6 @@ function CreateService() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="input-field"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block-label">Service Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setFormData({ ...formData, img: e.target.files[0] })}
-                className="input-file"
                 required
               />
             </div>

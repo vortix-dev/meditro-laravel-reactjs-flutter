@@ -17,7 +17,7 @@ class OrdonnanceController extends Controller
     {
         $request->validate([
             'dossier_medicale_id' => 'required|exists:dossier_medicales,id',
-            'medecin_id' => 'required|exists:users,id',
+            'medecin_id' => 'required|exists:medecins,id',
             'date' => 'required|date',
             'medicaments' => 'required|array',
         ]);
@@ -156,9 +156,9 @@ class OrdonnanceController extends Controller
                     <div class="header">
                         <img src="' . $logoUrl . '" alt="Clinic Logo">
                         <div class="clinic-info">
-                            <h2>Clinique Meditone</h2>
+                            <h2>Clinique MediTro</h2>
                             <p>123 Ouled fayet, Alger</p>
-                            <p>Tél: +123 456 789 | Email: contact@meditone.com</p>
+                            <p>Tél: +213 699 88 77 55 | Email: contact@meditro.com</p>
                         </div>
                     </div>
                     <h1>Ordonnance Médicale</h1>
@@ -193,7 +193,7 @@ class OrdonnanceController extends Controller
                         </tbody>
                     </table>
                     <div class="footer">
-                        <p>Document généré par le système médical - Clinique Meditone</p>
+                        <p>Document généré par le système médical - Clinique MediTro</p>
                     </div>
                 </div>
             </body>

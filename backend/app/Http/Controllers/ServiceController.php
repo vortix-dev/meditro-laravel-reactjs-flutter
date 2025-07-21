@@ -23,24 +23,19 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:20480',
         ]);
 
-        $data = $request->only('name');
-
-        if ($request->hasFile('img')) {
-            $data['img'] = $request->file('img')->store('uploads/services', 'public');
-        }
-
-        $service = Service::create($data);
+        $service = Service::create($validated);
 
         return response()->json([
             'status' => 200,
             'message' => 'Service created successfully.',
+            'data' => $service
         ], 200);
     }
 
