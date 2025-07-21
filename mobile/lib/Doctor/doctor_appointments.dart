@@ -19,8 +19,16 @@ class _DoctorAppointmentsScreenState extends State<DoctorAppointmentsScreen> {
   bool _isLoading = false;
   String? _errorMessage;
   String _selectedFilter = 'all';
+<<<<<<< HEAD
   final String baseUrl ='http://192.168.19.123:8000/api'; // Replace with your API URL
 
+=======
+<<<<<<< HEAD
+  final String baseUrl = 'http://192.168.43.161:8000/api';
+=======
+  final String baseUrl = 'https://api-meditro.x10.mx/api';
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
+>>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
 
   @override
   void initState() {

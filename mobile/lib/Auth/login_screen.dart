@@ -190,6 +190,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       );
                                       if (success) {
                                         if (authProvider.userRole == 'user') {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
                                           Navigator.of(
                                             context,
                                           ).pushAndRemoveUntil(
@@ -209,6 +213,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   const DoctorDashboard(),
                                             ),
                                             (Route<dynamic> route) => false,
+<<<<<<< HEAD
+=======
+=======
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const UserDashboard(),
+                                            ),
+                                          );
+                                        } else if (authProvider.userRole ==
+                                            'medecin') {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const DoctorDashboard(),
+                                            ),
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
+>>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
                                           );
                                         } else {
                                           ScaffoldMessenger.of(
@@ -216,7 +238,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ).showSnackBar(
                                             const SnackBar(
                                               content: Text(
+<<<<<<< HEAD
                                                 'This role is only available on the web.',
+=======
+<<<<<<< HEAD
+                                                'This role is only available on the web.',
+=======
+                                                'Ce rôle n’est pas disponible sur mobile.',
+>>>>>>> a726ac4b6ab91def70a26c661494c66f39a233b7
+>>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
                                               ),
                                             ),
                                           );

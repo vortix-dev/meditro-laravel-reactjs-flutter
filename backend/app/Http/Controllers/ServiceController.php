@@ -30,7 +30,21 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
+<<<<<<< HEAD
         $service = Service::create($validated);
+=======
+        $data = $request->only('name');
+
+        if ($request->hasFile('img')) {
+            // تخزين الصورة في مجلد public/uploads/services داخل storage
+            $path = $request->file('img')->store('uploads/services', 'public');
+
+            // إنشاء رابط مباشر للصورة
+            $data['img'] = asset('storage/' . $path);
+        }
+
+        $service = Service::create($data);
+>>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
 
         return response()->json([
             'status' => 200,
