@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './MyAppointments.css'; // استيراد ملف CSS
 
 function MyAppointments() {
   const [appointments, setAppointments] = useState([]);

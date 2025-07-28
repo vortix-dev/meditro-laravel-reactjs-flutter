@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './EditService.css'; // تأكد أنك أنشأت هذا الملف
 
 function EditService() {
   const { id } = useParams();

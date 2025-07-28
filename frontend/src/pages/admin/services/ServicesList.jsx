@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './ServicesList.css'; // تأكد من إضافة هذا الملف
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 function ServicesList() {

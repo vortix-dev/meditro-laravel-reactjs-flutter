@@ -28,7 +28,6 @@ import EditService from './pages/admin/services/EditService';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -126,7 +125,6 @@ function App() {
         </Routes>
         <Footer />
         <ToastContainer position="top-right" autoClose={3000} />
-      </div>
     </Router>
   );
 }

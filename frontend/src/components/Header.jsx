@@ -5,41 +5,61 @@ import RegisterModal from './RegisterModal';
 import { logout } from '../api/auth';
 import logo from '../assets/logo.png';
 import { toast } from 'react-toastify';
-import './Header.css'; // Re-added CSS import
+import { ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const isAuthenticated = !!token;
   const isUserRole = user?.role === 'user';
   const isAdminRole = user?.role === 'admin';
-  const isAssistantRole = user?.role === 'assistance'; // Fixed typo
+  const isAssistantRole = user?.role === 'assistance';
   const isDoctorRole = user?.role === 'medecin';
 
   const handleLogout = async () => {
     try {
       await logout();
       toast.success('Logged out successfully!');
-      navigate('/'); // Changed to /login for consistency
+      navigate('/');
     } catch (error) {
       toast.error('Logout failed. Please try again.');
     }
   };
 
   return (
-    <header className="header">
+    <>
+    <header className="app-bar">
       <div className="container">
         <div className="header-content">
           <div className="logo-container">
             <img src={logo} alt="Logo" className="logo" />
           </div>
-          <nav className="nav">
+
+          {/* زر القائمة المنسدلة للشاشات الصغيرة */}
+          <button
+            className="menu-toggle"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          {/* القائمة الرئيسية */}
+          <nav className={`nav ${isMenuOpen ? 'open' : ''}`}>
             <ul className="nav-list">
               <li className="nav-item">
                 <Link to="/" className="nav-link">Home</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/about" className="nav-link">About</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/contact" className="nav-link">Contact</Link>
               </li>
               {isAuthenticated && isUserRole && (
                 <>
@@ -47,18 +67,18 @@ function Header() {
                     <Link to="/my-appointments" className="nav-link">My Appointments</Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/medical-record" className="nav-link">Medical Record</Link>
+                      <Link to="/medical-record" className="nav-link">Medical Record</Link>
                   </li>
                 </>
               )}
               {isAuthenticated && isAdminRole && (
                 <li className="nav-item">
-                  <Link to="/admin" className="nav-link">Admin Dashboard</Link>
+                  <Link to="/admin" className="nav-link">Dashboard</Link>
                 </li>
               )}
               {isAuthenticated && isAssistantRole && (
                 <li className="nav-item">
-                  <Link to="/assistant" className="nav-link">Assistant Dashboard</Link>
+                  <Link to="/assistant" className="nav-link">Dashboard</Link>
                 </li>
               )}
               {isAuthenticated && isDoctorRole && (
@@ -66,41 +86,32 @@ function Header() {
                   <Link to="/doctor" className="nav-link">Doctor Dashboard</Link>
                 </li>
               )}
-              <li className="nav-item">
-                <Link to="/about" className="nav-link">About</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/contact" className="nav-link">Contact</Link>
-              </li>
             </ul>
           </nav>
+
+          {/* أزرار تسجيل الدخول/الخروج */}
           <div className="auth-buttons">
             {isAuthenticated ? (
               <button onClick={handleLogout} className="auth-button">
-                <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m5 4v-7" />
-                </svg>
+                <ArrowLeftOnRectangleIcon className="icon" />
               </button>
             ) : (
               <>
                 <button onClick={() => setIsLoginOpen(true)} className="auth-button">
-                  <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14" />
-                  </svg>
+                  <ArrowRightOnRectangleIcon className="icon" />
                 </button>
                 <button onClick={() => setIsRegisterOpen(true)} className="auth-button">
-                  <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h-3m3 0h3" />
-                  </svg>
+                  <UserPlusIcon className="icon" />
                 </button>
               </>
             )}
           </div>
         </div>
       </div>
+    </header>
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <RegisterModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
-    </header>
+      </>
   );
 }
 

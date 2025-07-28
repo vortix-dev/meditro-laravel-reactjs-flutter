@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './MedicalRecord.css';
 
 function MedicalRecord() {
   const [records, setRecords] = useState([]);

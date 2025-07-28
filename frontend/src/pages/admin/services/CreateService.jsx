@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './CreateService.css'; // تأكد من ربط ملف CSS
 
 function CreateService() {
   const [formData, setFormData] = useState({ name: '', img: null });

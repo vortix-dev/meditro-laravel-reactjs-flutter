@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import './RegisterModal.css'; // Import custom CSS
 
 function RegisterModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({

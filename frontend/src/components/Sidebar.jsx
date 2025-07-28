@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import './Sidebar.css'; // Import custom CSS
 
 function Sidebar() {
   const user = JSON.parse(localStorage.getItem('user') || '{}');

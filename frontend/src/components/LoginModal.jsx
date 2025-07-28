@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './LoginModal.css'; // Import custom CSS
 
 function LoginModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({ email: '', password: '' });

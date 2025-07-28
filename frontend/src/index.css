@@ -1,53 +1,617 @@
-
-
+/* src/styles/Home.css */
 body {
-  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #F4F7FA;
+  box-sizing: border-box;
+}
+.home-container {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #f5f6fa;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Custom Button Style */
-.btn-primary {
-  @apply bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-all duration-300;
+/* Background Image */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+  z-index: -1;
 }
 
-/* Card Hover Effect */
-.card {
-  @apply bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-all duration-300;
+/* Decorative Shapes */
+.shape {
+  position: absolute;
+  z-index: 0;
+}
+.shape-top-left {
+  top: 100px;
+  left: 50px;
+  width: 80px;
+}
+.shape-top-right {
+  top: 370px;
+  right: 20px;
+  width: 140px;
+}
+.shape-bottom-left {
+  bottom: 280px;
+  left: 0;
+  width: 80px;
+}
+.shape-bottom-right {
+  bottom: 0;
+  right: 0;
+  width: 80px;
+}
+.shape-bottom-left2 {
+  bottom: 50px;
+  left: 0;
+  width: 80px;
 }
 
-/* Header Style */
-header {
-  @apply bg-white shadow-md fixed w-full top-0 z-50;
+
+
+/* AppBar (Header) */
+.app-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(63, 81, 181, 0.9), rgba(63, 81, 181, 0.7));
+  backdrop-filter: blur(8px);
+  padding: 16px 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Section Background */
-.section-bg {
-  @apply bg-blue-100 py-20 text-center bg-cover bg-center;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Responsive Grid */
-.grid-container {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
+
+.logo-container {
+  flex: 0 0 auto;
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* تمركز القائمة أفقيًا */
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item .nav-link {
+  /* تخصيص أزرار Home, About, Contact */
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-item .nav-link:hover {
+  background: #f17832;
+  color: #fff;
+}
+
+.nav-link {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #f17832;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.auth-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #fff;
+  transition: transform 0.1s ease, background 0.2s ease;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-button:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  padding: 8px;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+  .nav.open {
+    display: block;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: rgba(63, 81, 181, 0.95);
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .nav-list {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center; /* تمركز العناصر في القائمة المنسدلة */
+  }
+  .nav-item:nth-child(-n+3) .nav-link {
+    background: none;
+    padding: 8px;
+    border-radius: 0;
+  }
+  .nav-item:nth-child(-n+3) .nav-link:hover {
+    background: none;
+    color: #f17832;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none;
+  }
+}
+
+/* Safe Area */
+.safe-area {
+  padding: 80px 16px 100px;
+  position: relative;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #3f51b5;
+  padding: 50px;
+}
+
+/* Content */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Central Image */
+.central-image-container {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.central-image {
+  max-width: 300px;
+  width: 100%;
+}
+
+/* Titles */
+.main-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #f17832;
+  margin-bottom: 16px;
+}
+
+/* Description */
+.main-description {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 24px;
+}
+
+
+/* Book Button */
+.book-button {
+  display: flex; /* استخدام flex لتمركز الزر */
+  justify-content: center; /* تمركز الزر أفقيًا */
+  width: 100%; /* عرض كامل للحاوية الخارجية */
+  max-width: 400px; /* الحد الأقصى لعرض الزر */
+  margin: 0 auto 34px; /* تمركز أفقي مع هامش سفلي */
+  padding: 14px;
+  background: #f17832;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.book-button.pressed {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.book-button-link {
+  display: block;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  width: 100%; /* ضمان أن الرابط يملأ الحاوية */
+}
+
+/* Responsive Design */
+@media (min-width: 600px) {
+  .book-button {
+    padding: 18px;
+  }
+  .book-button-link {
+    font-size: 20px;
+  }
+}
+
+
+/* Horizontal Scroll */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #3f51b5 #e0e0e0;
+}
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background: #3f51b5;
+  border-radius: 4px;
+}
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+/* Service Card */
+.service-card {
+  flex: 0 0 200px;
+  background: #fff;
+  border: 1px solid #3f51b5;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.service-card:hover {
+  transform: translateY(-4px);
+}
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+}
+.card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3f51b5;
+  margin: 8px 0;
+}
+
+/* Doctor Card */
+.doctor-card {
+  flex: 0 0 200px;
+  background: #fff;
+  border: 1px solid #3f51b5;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.doctor-card:hover {
+  transform: translateY(-4px);
+}
+.card-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.card-description {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Footer */
+.footer {
+  background: #3f51b5;
+  color: #fff;
+  padding: 40px 16px;
+}
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+.footer-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.footer-description, .footer-contact {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.footer-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+.footer-link {
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  line-height: 2;
+}
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (min-width: 600px) {
+  .main-title {
+    font-size: 30px;
+  }
+  .main-description {
+    font-size: 15px;
+  }
+  .section-title {
+    font-size: 28px;
+  }
+  .book-button {
+    padding: 18px;
+  }
+  .book-button-link {
+    font-size: 20px;
+  }
+  .service-card, .doctor-card {
+    flex: 0 0 240px;
+  }
+  .card-title {
+    font-size: 18px;
+  }
+  .card-description {
+    font-size: 16px;
+  }
+}
+
 
 /* Modal Overlay */
 .modal-overlay {
-  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* خلفية داكنة شفافة */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  overflow: auto;
 }
 
-/* Ensure smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* Modal Content */
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px; /* عرض أقصى للنافذة */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Custom animations for interactive elements */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Modal Animation */
+.modal-overlay[aria-hidden="true"] .modal-content {
+  transform: translateY(-20px);
+  opacity: 0;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-in-out;
+/* Modal Title */
+.modal-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #3f51b5;
+  text-align: center;
+  margin-bottom: 24px;
 }
+
+/* Form Group */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #3f51b5;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: #333;
+  background: #f5f6fa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #f17832;
+  box-shadow: 0 0 8px rgba(241, 120, 50, 0.3);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
+}
+
+.btn-primary {
+  background: #f17832;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #e0641a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #d0d0d0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 90%;
+    padding: 16px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+  }
+
+  .form-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+

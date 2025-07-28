@@ -1,4 +1,3 @@
-import './ServiceCard.css'; // Import the CSS file
 
 function ServiceCard({ service }) {
   return (

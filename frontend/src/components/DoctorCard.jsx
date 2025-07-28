@@ -1,5 +1,4 @@
 import doctorImage from '../assets/doctor.jpg'; // تأكد من صحة المسار
-import './DoctorCard.css';
 
 function DoctorCard({ doctor, serviceName }) {
   return (
