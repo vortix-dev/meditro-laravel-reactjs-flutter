@@ -55,12 +55,7 @@ function Header() {
               <li className="nav-item">
                 <Link to="/" className="nav-link">Home</Link>
               </li>
-              <li className="nav-item">
-                <Link to="/about" className="nav-link">About</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/contact" className="nav-link">Contact</Link>
-              </li>
+              
               {isAuthenticated && isUserRole && (
                 <>
                   <li className="nav-item">
@@ -86,6 +81,12 @@ function Header() {
                   <Link to="/doctor" className="nav-link">Doctor Dashboard</Link>
                 </li>
               )}
+              <li className="nav-item">
+                <Link to="/about" className="nav-link">About</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/contact" className="nav-link">Contact</Link>
+              </li>
             </ul>
           </nav>
 

@@ -41,10 +41,8 @@ class RdvController extends Controller
         $existingRdv = Rdv::where('medecin_id', $validated['medecin_id'])
             ->where('date', $validated['date'])
             ->where('heure', $validated['heure'])
-<<<<<<< HEAD
             ->whereIn('status',['pending','confirmed'])
-=======
->>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
+
             ->exists();
 
         if ($existingRdv) {

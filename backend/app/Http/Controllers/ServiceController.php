@@ -30,9 +30,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-<<<<<<< HEAD
         $service = Service::create($validated);
-=======
         $data = $request->only('name');
 
         if ($request->hasFile('img')) {
@@ -44,7 +42,6 @@ class ServiceController extends Controller
         }
 
         $service = Service::create($data);
->>>>>>> eb200946f82597c694de459c1d01cdbea5787bf8
 
         return response()->json([
             'status' => 200,
