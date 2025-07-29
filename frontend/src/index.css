@@ -616,3 +616,279 @@ body {
   }
 }
 
+/* Booking Page */
+.booking-page {
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Booking Container */
+.booking-container {
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  margin: 0 auto;
+}
+
+/* Booking Title */
+.booking-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Booking Form */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form Label */
+.form-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Form Select and Input */
+.form-select,
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #3f51b5;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: #333;
+  background: #f5f6fa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-select:focus,
+.form-input:focus {
+  outline: none;
+  border-color: #f17832;
+  box-shadow: 0 0 8px rgba(241, 120, 50, 0.3);
+}
+
+.form-select:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* Submit Button */
+.submit-button {
+  padding: 12px;
+  background: #f17832;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.submit-button:hover {
+  background: #e0641a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submit-button:active {
+  transform: scale(0.95);
+}
+
+.submit-button:disabled {
+  background: #d0d0d0;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .booking-container {
+    padding: 24px;
+  }
+
+  .booking-title {
+    font-size: 24px;
+  }
+
+  .form-select,
+  .form-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .submit-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* Appointments Page */
+.appointments-container {
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Appointments Wrapper */
+.appointments-wrapper {
+  max-width: 800px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  margin: 0 auto;
+}
+
+/* Appointments Title */
+.appointments-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Loading Text */
+.loading-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5;
+  text-align: center;
+  padding: 50px;
+}
+
+/* Table Container */
+.table-container {
+  overflow-x: auto;
+}
+
+/* Appointments Table */
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Table Header */
+.table-header {
+  background: #3f51b5;
+  color: #fff;
+}
+
+.table-header th {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Table Row */
+.table-row {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table-row td {
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #fff3e0;
+  color: #f17832;
+}
+
+.status-badge.confirmed {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.status-badge.cancelled {
+  background: #ffebee;
+  color: #f44336;
+}
+
+/* Cancel Button */
+.cancel-button {
+  padding: 8px 16px;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.cancel-button:hover {
+  background: #d32f2f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-button:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .appointments-wrapper {
+    padding: 24px;
+  }
+
+  .appointments-title {
+    font-size: 24px;
+  }
+
+  .table-header th,
+  .table-row td {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .cancel-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
