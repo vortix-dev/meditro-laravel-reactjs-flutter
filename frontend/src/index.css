@@ -1070,7 +1070,8 @@ body {
   padding: 24px;
   position: relative;
   top: 120px; /* Match header height */
-  height: 70vh;
+  height: 60vh;
+  margin-bottom: 150px; /* Match footer height */
   left: 0;
   z-index: 1;
   overflow-y: auto;
