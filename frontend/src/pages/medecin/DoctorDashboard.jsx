@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import './DoctorDashboard.css'; // تأكد من الربط بملف CSS الصحيح
 
 function DoctorDashboard() {
   return (

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Sidebar from '../../components/Sidebar';
-import './DoctorPatients.css';
 
 function DoctorPatients() {
   const [patients, setPatients] = useState([]);

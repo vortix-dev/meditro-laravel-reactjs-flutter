@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Sidebar from '../../components/Sidebar';
+import './AssistantAppointments.css'; // Import the new CSS
 
 function AssistantAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -42,44 +43,42 @@ function AssistantAppointments() {
     }
   };
 
-  if (loading) return <p className="text-center text-gray-600 pt-20">Loading...</p>;
+  if (loading) return <p className="loading-text">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <div className="flex-1 container mx-auto px-4 pt-20 pb-16 ml-64">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 animate-fade-in">
-          Manage Appointments
-        </h2>
+    <div className="appointments-container">
+      <div className="appointments-wrapper">
+        <h2 className="appointments-title">Manage Appointments</h2>
         {appointments.length === 0 ? (
-          <p className="text-center text-gray-600">No appointments found.</p>
+          <p className="no-appointments">No appointments found.</p>
         ) : (
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-blue-500 text-white">
-                  <th className="py-3 px-4 text-left">ID</th>
-                  <th className="py-3 px-4 text-left">Doctor</th>
-                  <th className="py-3 px-4 text-left">User</th>
-                  <th className="py-3 px-4 text-left">Date</th>
-                  <th className="py-3 px-4 text-left">Time</th>
-                  <th className="py-3 px-4 text-left">Status</th>
-                  <th className="py-3 px-4 text-left">Actions</th>
+          <div className="table-container">
+            <table className="appointments-table">
+              <thead className="table-header">
+                <tr>
+                  <th>ID</th>
+                  <th>Doctor</th>
+                  <th>User</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {appointments.map((appt) => (
-                  <tr key={appt.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">{appt.id}</td>
-                    <td className="py-3 px-4">{appt.medecin?.name || 'N/A'}</td>
-                    <td className="py-3 px-4">{appt.user?.name || 'N/A'}</td>
-                    <td className="py-3 px-4">{new Date(appt.date).toLocaleDateString()}</td>
-                    <td className="py-3 px-4">{appt.heure || 'N/A'}</td>
-                    <td className="py-3 px-4">{appt.status}</td>
-                    <td className="py-3 px-4">
+                  <tr key={appt.id} className="table-row">
+                    <td>{appt.id}</td>
+                    <td>{appt.medecin?.name || 'N/A'}</td>
+                    <td>{appt.user?.name || 'N/A'}</td>
+                    <td>{new Date(appt.date).toLocaleDateString()}</td>
+                    <td>{appt.heure || 'N/A'}</td>
+                    <td>{appt.status}</td>
+                    <td>
                       <select
+                        className="status-select"
                         value={appt.status}
                         onChange={(e) => handleStatusChange(appt.id, e.target.value)}
-                        className="px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         disabled={appt.status === 'done'}
                       >
                         <option value="">Select</option>

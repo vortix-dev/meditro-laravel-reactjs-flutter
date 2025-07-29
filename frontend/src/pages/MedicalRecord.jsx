@@ -46,7 +46,7 @@ function MedicalRecord() {
 
   return (
     <div className="medical-record">
-      <div className="container">
+      <div className="container-medical-record">
         <h2 className="title">My Medical Record</h2>
         {loading ? (
           <p className="loading">Loading...</p>

@@ -43,7 +43,6 @@ function AssistantProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send only filled fields
     const payload = {};
     if (formData.name && formData.name !== profile.name) {
       payload.name = formData.name;
@@ -56,7 +55,6 @@ function AssistantProfile() {
       payload.password_confirmation = formData.password_confirmation;
     }
 
-    // Check if payload is empty
     if (Object.keys(payload).length === 0) {
       toast.warning('No changes to save');
       return;
@@ -83,65 +81,61 @@ function AssistantProfile() {
     }
   };
 
-  if (isLoading) return <p className="text-center text-gray-600 pt-20">Loading...</p>;
+  if (isLoading) return <p className="loading-text">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <div className="flex-1 container mx-auto px-4 pt-20 pb-16 ml-64">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6 animate-fade-in">
-          Assistant Profile
-        </h2>
-        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Current Profile</h3>
-            <p><strong>Name:</strong> {profile.name}</p>
-            <p><strong>Username:</strong> {profile.email}</p>
-          </div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Update Profile</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-gray-700">Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Email</label>
-              <input
-                type="text"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Password (Optional)</label>
-              <input
-                type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-4 py-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Leave blank to keep current password"
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block text-gray-700">Confirm Password</label>
-              <input
-                type="password"
-                value={formData.password_confirmation}
-                onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
-                className="w-full px-4 py-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Confirm new password"
-              />
-            </div>
-            <button type="submit" className="btn-primary w-full py-3">
-              Update Profile
-            </button>
-          </form>
+    <div className="profile-container">
+      <div className="profile-wrapper">
+        <h2 className="profile-title">Assistant Profile</h2>
+        <div className="current-profile">
+          <h3 className="current-profile-title">Current Profile</h3>
+          <p className="current-profile-text"><strong>Name:</strong> {profile.name}</p>
+          <p className="current-profile-text"><strong>Email:</strong> {profile.email}</p>
         </div>
+        <h3 className="update-profile-title">Update Profile</h3>
+        <form className="profile-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Name</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Password (Optional)</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="form-input"
+              placeholder="Leave blank to keep current password"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Confirm Password</label>
+            <input
+              type="password"
+              value={formData.password_confirmation}
+              onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
+              className="form-input"
+              placeholder="Confirm new password"
+            />
+          </div>
+          <button type="submit" className="submit-button">
+            Update Profile
+          </button>
+        </form>
       </div>
     </div>
   );

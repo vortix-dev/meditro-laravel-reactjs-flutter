@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './CreateDoctor.css'; // تأكد من إنشاء هذا الملف
 
 function CreateDoctor() {
   const [formData, setFormData] = useState({ service_id: '', name: '', email: '', password: '' });

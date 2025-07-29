@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Sidebar from '../../components/Sidebar';
-import './MedicalRecord.css'; 
 
 function MedicalRecord() {
   const { user_id } = useParams();

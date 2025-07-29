@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaTrash } from 'react-icons/fa';
-import './DoctorsList.css'; // ملف CSS خارجي
 
 function DoctorsList() {
   const [doctors, setDoctors] = useState([]);

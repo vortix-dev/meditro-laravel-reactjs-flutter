@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Sidebar from '../../components/Sidebar';
-import './DoctorProfile.css'; // ⬅️ ملف التنسيق الخارجي
 
 function DoctorProfile() {
   const [profile, setProfile] = useState({ name: '', email: '' });
