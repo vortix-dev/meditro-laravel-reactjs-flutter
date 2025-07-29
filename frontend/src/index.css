@@ -892,3 +892,161 @@ body {
     padding: 6px 12px;
   }
 }
+
+/* Medical Record Page */
+.medical-record {
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Container */
+.container {
+  max-width: 1000px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  margin: 0 auto;
+}
+
+/* Title */
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Loading and Empty States */
+.loading,
+.empty {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5;
+  text-align: center;
+  padding: 50px;
+}
+
+/* Grid Container */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border: 1px solid #3f51b5;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Card Content */
+.card-content {
+  padding: 16px;
+}
+
+/* Card Title */
+.card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #3f51b5;
+  margin-bottom: 12px;
+}
+
+/* Card Text */
+.card-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Prescriptions Title */
+.prescriptions-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f17832;
+  margin: 12px 0;
+}
+
+/* Prescription Item */
+.prescription-item {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Download Button */
+.download-button {
+  padding: 8px 16px;
+  background: #f17832;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.download-button:hover {
+  background: #e0641a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.download-button:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    padding: 24px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .card-text,
+  .prescription-item {
+    font-size: 12px;
+  }
+
+  .download-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
