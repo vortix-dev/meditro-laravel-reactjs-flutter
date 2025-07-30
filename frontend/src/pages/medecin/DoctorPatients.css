@@ -1,0 +1,200 @@
+/* src/styles/DoctorPatients.css */
+
+/* Doctor Patients Container */
+.doctor-patients {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 80px 24px; /* Matches .safe-area and .doctor-appointments-content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5; /* Matches primary color from Home.css */
+  text-align: center;
+  margin-bottom: 24px;
+  animation: fade-in 0.5s ease-in; /* Matches animation from AssistantProfile.css */
+}
+
+/* Fade-in Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.loading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .loading-text from AssistantProfile.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* No Patients State */
+.no-patients {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .empty from MedicalRecord.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* Table Container */
+.table-container {
+  max-width: 1000px; /* Matches .container-medical-record max-width */
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Matches .appointments-wrapper */
+  padding: 16px;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Table Header */
+.table thead {
+  background: #3f51b5; /* Matches .table-header from Appointments.css */
+  color: #fff;
+}
+
+.table th {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Table Body */
+.table tbody tr {
+  border-bottom: 1px solid #e0e0e0; /* Matches .table-row from Appointments.css */
+  transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: #f5f6fa; /* Matches hover effect from DoctorAppointments.css */
+}
+
+.table td {
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* View Dossier Button */
+.btn-dossier {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #f17832; /* Matches .submit-button from Home.css */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-dossier:hover {
+  background: #e0641a; /* Matches .submit-button:hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-dossier:active {
+  transform: scale(0.95); /* Matches .submit-button:active */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0px; /* Matches sidebar width at 768px from DoctorAppointments.css */
+    padding: 60px 16px; /* Adjusted for smaller screens */
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .table-container {
+    padding: 12px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .btn-dossier {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .loading,
+  .no-patients {
+    font-size: 16px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .doctor-patients {
+    flex-direction: column;
+  }
+
+  .content {
+    margin-left: 0; /* Remove sidebar margin for mobile */
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .table-container {
+    padding: 8px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .btn-dossier {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .loading,
+  .no-patients {
+    font-size: 14px;
+    padding: 20px;
+  }
+}

@@ -1,0 +1,249 @@
+/* src/styles/DoctorProfile.css */
+
+/* Doctor Profile Page */
+.doctor-profile-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 80px 24px; /* Matches .safe-area and .doctor-appointments-content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5; /* Matches primary color from Home.css */
+  text-align: center;
+  margin-bottom: 24px;
+  animation: fade-in 0.5s ease-in; /* Matches animation from AssistantProfile.css */
+}
+
+/* Fade-in Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.loading-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .loading-text from AssistantProfile.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* Profile Card */
+.profile-card {
+  max-width: 600px; /* Matches .profile-wrapper from AssistantProfile.css */
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Matches .appointments-wrapper */
+  padding: 32px;
+  margin: 0 auto;
+}
+
+/* Current Profile Section */
+.current-profile {
+  margin-bottom: 24px;
+}
+
+.current-profile h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #3f51b5; /* Matches .current-profile-title from AssistantProfile.css */
+  margin-bottom: 12px;
+}
+
+.current-profile p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333; /* Matches .current-profile-text */
+  margin-bottom: 8px;
+}
+
+.current-profile p strong {
+  color: #3f51b5; /* Matches primary color for emphasis */
+}
+
+/* Update Profile Title */
+.profile-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #3f51b5; /* Matches .update-profile-title */
+  margin-bottom: 16px;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Matches .booking-form and .profile-form */
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form Label */
+.form-group label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333; /* Matches .form-label from Home.css */
+  margin-bottom: 8px;
+}
+
+/* Form Input */
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #3f51b5; /* Matches .form-input from Home.css */
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: #333;
+  background: #f5f6fa; /* Matches form input background */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #f17832; /* Matches .form-input:focus */
+  box-shadow: 0 0 8px rgba(241, 120, 50, 0.3);
+}
+
+.form-group input::placeholder {
+  color: #999; /* Matches .form-input::placeholder from AssistantProfile.css */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+}
+
+/* Submit Button */
+.btn-submit {
+  padding: 12px;
+  background: #f17832; /* Matches .submit-button from Home.css */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-submit:hover {
+  background: #e0641a; /* Matches .submit-button:hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-submit:active {
+  transform: scale(0.95); /* Matches .submit-button:active */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 200px; /* Matches sidebar width at 768px from DoctorAppointments.css */
+    padding: 60px 16px; /* Adjusted for smaller screens */
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .profile-card {
+    padding: 24px;
+  }
+
+  .current-profile h3,
+  .profile-card h3 {
+    font-size: 18px;
+  }
+
+  .current-profile p,
+  .form-group input {
+    font-size: 14px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .btn-submit {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .loading-text {
+    font-size: 16px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .doctor-profile-page {
+    flex-direction: column;
+  }
+
+  .content {
+    margin-left: 0; /* Remove sidebar margin for mobile */
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .profile-card {
+    padding: 16px;
+  }
+
+  .current-profile h3,
+  .profile-card h3 {
+    font-size: 16px;
+  }
+
+  .current-profile p,
+  .form-group label,
+  .form-group input {
+    font-size: 12px;
+  }
+
+  .form-group input {
+    padding: 10px;
+  }
+
+  .btn-submit {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .loading-text {
+    font-size: 14px;
+    padding: 20px;
+  }
+}
