@@ -1623,3 +1623,465 @@ body {
     padding: 20px;
   }
 }
+
+/* src/styles/MedicalRecord.css */
+
+/* Medical Record Container */
+.min-h-screen.bg-gray-100.flex {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f6fa; /* Matches .doctor-patients and others */
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Main Content */
+.container.mx-auto.px-4.pt-20.pb-16.ml-64 {
+  flex: 1;
+  padding: 80px 24px; /* Matches .content in DoctorPatients.css */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
+.text-3xl.font-bold.text-center.text-gray-800.mb-8.animate-fade-in {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5; /* Matches primary color from Home.css */
+  text-align: center;
+  margin-bottom: 24px;
+  animation: fade-in 0.5s ease-in; /* Matches animation from AssistantProfile.css */
+}
+
+/* Fade-in Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.text-center.text-gray-600.pt-20 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .loading from DoctorPatients.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* No Dossier State */
+.text-center.text-gray-600.mb-4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .no-patients from DoctorPatients.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* Medical Record Card */
+.max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 {
+  max-width: 600px; /* Matches .profile-card from DoctorProfile.css */
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Matches .profile-card */
+  padding: 32px;
+  margin: 0 auto 32px;
+}
+
+/* Card Title */
+.text-xl.font-semibold.text-gray-800.mb-4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #3f51b5; /* Matches .current-profile-title */
+  margin-bottom: 12px;
+}
+
+/* Card Text */
+.max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333; /* Matches .current-profile-text */
+  margin-bottom: 8px;
+}
+
+.max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 p strong {
+  color: #3f51b5; /* Matches .current-profile p strong */
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Matches .modal-overlay from Home.css */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  overflow: auto;
+}
+
+/* Modal Content */
+.bg-white.rounded-lg.p-6.w-full.max-w-md {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px; /* Matches .modal-content from Home.css */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Form Title */
+.bg-white.rounded-lg.p-6.w-full.max-w-md h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #3f51b5; /* Matches .modal-title */
+  margin-bottom: 16px;
+}
+
+/* Form Subtitle (Medicaments) */
+.text-lg.font-semibold.text-gray-800.mb-2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3f51b5; /* Matches .prescriptions-title from MedicalRecord.css */
+  margin-bottom: 12px;
+}
+
+/* Form Group */
+.mb-4 {
+  margin-bottom: 16px; /* Matches .form-group from Home.css */
+}
+
+/* Form Label */
+.block.text-gray-700 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333; /* Matches .form-label from Home.css */
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Form Input and Select */
+.w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500 {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #3f51b5; /* Matches .form-input from Home.css */
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: #333;
+  background: #f5f6fa; /* Matches .form-input background */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500:focus {
+  outline: none;
+  border-color: #f17832; /* Matches .form-input:focus */
+  box-shadow: 0 0 8px rgba(241, 120, 50, 0.3);
+}
+
+.w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500::placeholder {
+  color: #999; /* Matches .form-input::placeholder from AssistantProfile.css */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+}
+
+/* Prescription Table Container */
+.bg-white.shadow-lg.rounded-lg.overflow-hidden {
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Matches .table-container */
+  overflow: hidden;
+}
+
+/* Prescription Table Header */
+.bg-blue-500.text-white {
+  background: #3f51b5; /* Matches .table thead from DoctorPatients.css */
+  color: #fff;
+}
+
+.py-3.px-4.text-left {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Prescription Table Row */
+.border-b.hover:bg-gray-50 {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0; /* Matches .table-row from DoctorPatients.css */
+  transition: background 0.2s ease;
+}
+
+.border-b.hover:bg-gray-50:hover {
+  background: #f5f6fa; /* Matches table row hover effect */
+}
+
+.py-3.px-4 {
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* No Prescriptions State */
+.text-center.text-gray-600.p-4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .no-patients */
+  text-align: center;
+  padding: 50px;
+}
+
+/* Buttons */
+.btn-primary {
+  padding: 12px 24px;
+  background: #f17832; /* Matches .submit-button from Home.css */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #e0641a; /* Matches .submit-button:hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+  transform: scale(0.95); /* Matches .submit-button:active */
+}
+
+.px-4.py-2.bg-gray-300.text-gray-800.rounded.hover:bg-gray-400 {
+  padding: 12px 24px;
+  background: #e0e0e0; /* Matches .btn-secondary from Home.css */
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.px-4.py-2.bg-gray-300.text-gray-800.rounded.hover:bg-gray-400:hover {
+  background: #d0d0d0; /* Matches .btn-secondary:hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.px-4.py-2.bg-gray-300.text-gray-800.rounded.hover:bg-gray-400:active {
+  transform: scale(0.95); /* Matches .btn-secondary:active */
+}
+
+.px-2.py-1.bg-blue-500.text-white.rounded.mr-2.hover:bg-blue-600 {
+  padding: 8px 16px;
+  background: #3f51b5; /* Matches primary color */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.px-2.py-1.bg-blue-500.text-white.rounded.mr-2.hover:bg-blue-600:hover {
+  background: #2c3e9c; /* Darker shade for hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.px-2.py-1.bg-blue-500.text-white.rounded.mr-2.hover:bg-blue-600:active {
+  transform: scale(0.95);
+}
+
+.px-2.py-1.bg-red-500.text-white.rounded.hover:bg-red-600 {
+  padding: 8px 16px;
+  background: #f44336; /* Matches .cancel-button from Appointments.css */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.px-2.py-1.bg-red-500.text-white.rounded.hover:bg-red-600:hover {
+  background: #d32f2f; /* Matches .cancel-button:hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.px-2.py-1.bg-red-500.text-white.rounded.hover:bg-red-600:active {
+  transform: scale(0.95);
+}
+
+.px-4.py-2.bg-green-500.text-white.rounded-lg.hover:bg-green-600 {
+  padding: 8px 16px;
+  background: #4caf50; /* Green for Add Medicament button */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.px-4.py-2.bg-green-500.text-white.rounded-lg.hover:bg-green-600:hover {
+  background: #43a047; /* Darker green for hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.px-4.py-2.bg-green-500.text-white.rounded-lg.hover:bg-green-600:active {
+  transform: scale(0.95);
+}
+
+/* Flex Container for Buttons */
+.flex.justify-end.space-x-2 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px; /* Matches .form-actions from Home.css */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container.mx-auto.px-4.pt-20.pb-16.ml-64 {
+    margin-left: 200px; /* Matches sidebar width at 768px */
+    padding: 60px 16px; /* Adjusted for smaller screens */
+  }
+
+  .text-3xl.font-bold.text-center.text-gray-800.mb-8.animate-fade-in {
+    font-size: 24px;
+  }
+
+  .max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 {
+    padding: 24px;
+  }
+
+  .text-xl.font-semibold.text-gray-800.mb-4,
+  .bg-white.rounded-lg.p-6.w-full.max-w-md h3 {
+    font-size: 18px;
+  }
+
+  .max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 p,
+  .block.text-gray-700,
+  .w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500 {
+    font-size: 14px;
+  }
+
+  .w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500 {
+    padding: 10px;
+  }
+
+  .btn-primary,
+  .px-4.py-2.bg-gray-300.text-gray-800.rounded.hover:bg-gray-400,
+  .px-2.py-1.bg-blue-500.text-white.rounded.mr-2.hover:bg-blue-600,
+  .px-2.py-1.bg-red-500.text-white.rounded.hover:bg-red-600,
+  .px-4.py-2.bg-green-500.text-white.rounded-lg.hover:bg-green-600 {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .text-center.text-gray-600.mb-4,
+  .text-center.text-gray-600.p-4 {
+    font-size: 16px;
+    padding: 30px;
+  }
+
+  .py-3.px-4.text-left,
+  .py-3.px-4 {
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .min-h-screen.bg-gray-100.flex {
+    flex-direction: column;
+  }
+
+  .container.mx-auto.px-4.pt-20.pb-16.ml-64 {
+    margin-left: 0; /* Remove sidebar margin for mobile */
+    padding: 16px;
+  }
+
+  .text-3xl.font-bold.text-center.text-gray-800.mb-8.animate-fade-in {
+    font-size: 20px;
+  }
+
+  .max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 {
+    padding: 16px;
+  }
+
+  .bg-white.rounded-lg.p-6.w-full.max-w-md {
+    width: 90%;
+    padding: 16px;
+  }
+
+  .text-xl.font-semibold.text-gray-800.mb-4,
+  .bg-white.rounded-lg.p-6.w-full.max-w-md h3 {
+    font-size: 16px;
+  }
+
+  .text-lg.font-semibold.text-gray-800.mb-2 {
+    font-size: 14px;
+  }
+
+  .max-w-md.mx-auto.bg-white.shadow-lg.rounded-lg.p-6.mb-8 p,
+  .block.text-gray-700,
+  .w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500 {
+    font-size: 12px;
+  }
+
+  .w-full.px-3.py-2.border.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500 {
+    padding: 8px;
+  }
+
+  .btn-primary,
+  .px-4.py-2.bg-gray-300.text-gray-800.rounded.hover:bg-gray-400,
+  .px-2.py-1.bg-blue-500.text-white.rounded.mr-2.hover:bg-blue-600,
+  .px-2.py-1.bg-red-500.text-white.rounded.hover:bg-red-600,
+  .px-4.py-2.bg-green-500.text-white.rounded-lg.hover:bg-green-600 {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  .text-center.text-gray-600.mb-4,
+  .text-center.text-gray-600.p-4 {
+    font-size: 14px;
+    padding: 20px;
+  }
+
+  .py-3.px-4.text-left,
+  .py-3.px-4 {
+    font-size: 11px;
+    padding: 8px;
+  }
+}
+.w-full {
+  margin-top: 10px;
+}
