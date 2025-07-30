@@ -59,10 +59,10 @@ function Header() {
               {isAuthenticated && isUserRole && (
                 <>
                   <li className="nav-item">
-                    <Link to="/my-appointments" className="nav-link">My Appointments</Link>
+                    <Link to="/my-appointments" className="nav-link">Appointments</Link>
                   </li>
                   <li className="nav-item">
-                      <Link to="/medical-record" className="nav-link">Medical Record</Link>
+                      <Link to="/medical-record" className="nav-link">Medical</Link>
                   </li>
                 </>
               )}
@@ -78,7 +78,7 @@ function Header() {
               )}
               {isAuthenticated && isDoctorRole && (
                 <li className="nav-item">
-                  <Link to="/doctor" className="nav-link">Doctor Dashboard</Link>
+                  <Link to="/doctor" className="nav-link">Dashboard</Link>
                 </li>
               )}
               <li className="nav-item">

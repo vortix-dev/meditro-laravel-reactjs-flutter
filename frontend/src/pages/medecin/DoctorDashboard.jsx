@@ -5,9 +5,6 @@ function DoctorDashboard() {
   return (
     <div className="dashboard-container">
       <Sidebar />
-      <div className="dashboard-content">
-        <h2 className="dashboard-title">Doctor Dashboard</h2>
-      </div>
     </div>
   );
 }

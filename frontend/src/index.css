@@ -1422,3 +1422,204 @@ body {
     padding: 30px;
   }
 }
+
+/* src/styles/DoctorAppointments.css */
+
+/* Doctor Appointments Container */
+.doctor-appointments-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Doctor Appointments Content */
+.doctor-appointments-content {
+  flex: 1;
+  padding: 80px 24px; /* Matches .safe-area padding from Home.css */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Doctor Appointments Title */
+.doctor-appointments-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5; /* Matches primary color from Home.css */
+  text-align: center;
+  margin-bottom: 24px;
+  animation: fade-in 0.5s ease-in; /* Matches animation from AssistantProfile.css */
+}
+
+/* Fade-in Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.doctor-appointments-loading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .loading-text from Home.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* Empty State */
+.doctor-appointments-empty {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #3f51b5; /* Matches .empty from MedicalRecord.css */
+  text-align: center;
+  padding: 50px;
+}
+
+/* Table Wrapper */
+.doctor-appointments-table-wrapper {
+  max-width: 1000px; /* Matches .container-medical-record max-width */
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Matches .appointments-wrapper */
+  padding: 16px;
+}
+
+/* Table */
+.doctor-appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Table Header */
+.doctor-appointments-table thead {
+  background: #3f51b5; /* Matches .table-header from Appointments.css */
+  color: #fff;
+}
+
+.doctor-appointments-table th {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Table Body */
+.doctor-appointments-table tbody tr {
+  border-bottom: 1px solid #e0e0e0; /* Matches .table-row from Appointments.css */
+  transition: background 0.2s ease;
+}
+
+.doctor-appointments-table tbody tr:hover {
+  background: #f5f6fa; /* Matches background color for subtle hover effect */
+}
+
+.doctor-appointments-table td {
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Select Dropdown */
+.doctor-appointments-table select {
+  padding: 8px;
+  border: 1px solid #3f51b5; /* Matches .form-input border */
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #f5f6fa; /* Matches .form-input background */
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.doctor-appointments-table select:focus {
+  outline: none;
+  border-color: #f17832; /* Matches .form-input:focus */
+  box-shadow: 0 0 8px rgba(241, 120, 50, 0.3);
+}
+
+.doctor-appointments-table select:disabled {
+  background: #e0e0e0; /* Matches .form-select:disabled */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .doctor-appointments-content {
+    margin-left: 200px; /* Matches sidebar width at 768px */
+    padding: 60px 16px; /* Adjusted padding for smaller screens */
+  }
+
+  .doctor-appointments-title {
+    font-size: 24px;
+  }
+
+  .doctor-appointments-table-wrapper {
+    padding: 12px;
+  }
+
+  .doctor-appointments-table th,
+  .doctor-appointments-table td {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .doctor-appointments-table select {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .doctor-appointments-loading,
+  .doctor-appointments-empty {
+    font-size: 16px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .doctor-appointments-container {
+    flex-direction: column;
+  }
+
+  .doctor-appointments-content {
+    margin-left: 0; /* Remove margin for full-width content */
+    padding: 16px;
+  }
+
+  .doctor-appointments-title {
+    font-size: 20px;
+  }
+
+  .doctor-appointments-table-wrapper {
+    padding: 8px;
+  }
+
+  .doctor-appointments-table th,
+  .doctor-appointments-table td {
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .doctor-appointments-table select {
+    font-size: 11px;
+    padding: 5px;
+  }
+
+  .doctor-appointments-loading,
+  .doctor-appointments-empty {
+    font-size: 14px;
+    padding: 20px;
+  }
+}

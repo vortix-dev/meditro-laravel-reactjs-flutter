@@ -69,7 +69,7 @@ function MedicalRecord() {
                       <h4 className="prescriptions-title">Prescriptions</h4>
                       {record.ordonnance.map((prescription) => (
                         <div key={prescription.id} className="prescription-item">
-                          Date: {prescription.date}
+                          Date: {prescription.date} &nbsp;
                           <button
                             onClick={() => handleDownloadPrescription(prescription.id)}
                             className="download-button"

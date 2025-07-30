@@ -48,17 +48,17 @@ function DoctorAppointments() {
   };
 
   return (
-    <div className="appointments-container">
+    <div className="doctor-appointments-container">
       <Sidebar />
-      <div className="appointments-content">
-        <h2 className="appointments-title">Manage Appointments</h2>
+      <div className="doctor-appointments-content">
+        <h2 className="doctor-appointments-title">Manage Appointments</h2>
         {loading ? (
-          <p className="appointments-loading">Loading...</p>
+          <p className="doctor-appointments-loading">Loading...</p>
         ) : appointments.length === 0 ? (
-          <p className="appointments-empty">No appointments found.</p>
+          <p className="doctor-appointments-empty">No appointments found.</p>
         ) : (
-          <div className="appointments-table-wrapper">
-            <table className="appointments-table">
+          <div className="doctor-appointments-table-wrapper">
+            <table className="doctor-appointments-table">
               <thead>
                 <tr>
                   <th>ID</th>
